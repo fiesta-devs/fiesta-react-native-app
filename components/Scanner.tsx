@@ -1,46 +1,37 @@
-// Scanner.tsx
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { BarCodeScanner, BarCodeScannedCallback, BarCodeScannerResult } from 'expo-barcode-scanner';
+import React from "react";
+import { View, SafeAreaView } from "react-native";
+import { BarCodeScanner, BarCodeScannedCallback } from "expo-barcode-scanner";
+import { useTailwind } from "tailwind-rn";
 
-// Define a type for the props
 type ScannerProps = {
   hasPermission: boolean | null;
   scanned: boolean;
   onScan: BarCodeScannedCallback;
 };
 
-function Scanner({ hasPermission, scanned, onScan }: ScannerProps) {  
+function Scanner({ hasPermission, scanned, onScan }: ScannerProps) {
+  const tailwind = useTailwind();
+
   if (hasPermission === null || hasPermission === false) {
     return null;
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.barcodeBox}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : onScan}
-          style={{ height: 400, width: 400 }}
-        />
+    <SafeAreaView style={tailwind("h-full")}>
+      <View style={tailwind("flex-1 items-center justify-center")}>
+        <View
+          style={tailwind(
+            "bg-tomato items-center justify-center h-75 w-75 overflow-hidden rounded-lg"
+          )}
+        >
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : onScan}
+            style={{ height: 300, width: 300 }}
+          />
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  barcodeBox: {
-    backgroundColor: 'tomato',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 300,
-    width: 300,
-    overflow: 'hidden',
-    borderRadius: 30,
-  },
-});
+}
 
 export default Scanner;

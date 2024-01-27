@@ -1,10 +1,16 @@
-// App.tsx
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { BarCodeScanner, BarCodeScannedCallback, BarCodeScannerResult } from 'expo-barcode-scanner';
-import Scanner from './components/Scanner'; // Adjust the path as necessary
+import React, { useState, useEffect } from "react";
+import { Text, View, Button, SafeAreaView } from "react-native";
+import {
+  BarCodeScanner,
+  BarCodeScannedCallback,
+  BarCodeScannerResult,
+} from "expo-barcode-scanner";
+import Scanner from "./components/Scanner";
+import { useTailwind } from "tailwind-rn";
 
-export default function App() {
+export default function App(): JSX.Element {
+  const tailwind = useTailwind();
+
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
   const [text, setText] = useState<string>("Not yet scanned");
@@ -20,51 +26,48 @@ export default function App() {
     askForCamPermission();
   }, []);
 
-  const handleScan: BarCodeScannedCallback = (scanningResult: BarCodeScannerResult) => {
+  const handleScan: BarCodeScannedCallback = (
+    scanningResult: BarCodeScannerResult
+  ) => {
     setScanned(true);
     setText(scanningResult.data);
-    console.log('Type: ' + scanningResult.type + '\nData: ' + scanningResult.data);
+    console.log(
+      "Type: " + scanningResult.type + "\nData: " + scanningResult.data
+    );
   };
 
   return (
-    <View style={styles.container}>
-      {hasPermission === null && <Text>Requesting for camera permission</Text>}
-      {hasPermission === false && (
-        <View>
-          <Text style={{ margin: 10 }}>No access to camera</Text>
-          <Button title={"Allow Camera"} onPress={askForCamPermission} />
-        </View>
-      )}
-      {hasPermission && (
-        <>
-          <Scanner
-            hasPermission={hasPermission}
-            scanned={scanned}
-            onScan={handleScan}
-          />
-          <Text style={styles.mainText}>{text}</Text>
-          {scanned && (
-            <Button
-              title={"Scan again?"}
-              onPress={() => setScanned(false)}
-              color="tomato"
+    <SafeAreaView style={tailwind("h-full")}>
+      <View style={tailwind("flex-1 bg-white items-center justify-center")}>
+        {hasPermission === null && (
+          <Text style={tailwind("text-base")}>
+            Requesting for camera permission
+          </Text>
+        )}
+        {hasPermission === false && (
+          <View style={tailwind("p-4")}>
+            <Text style={tailwind("text-base m-2")}>No access to camera</Text>
+            <Button title={"Allow Camera"} onPress={askForCamPermission} />
+          </View>
+        )}
+        {hasPermission && (
+          <>
+            <Scanner
+              hasPermission={hasPermission}
+              scanned={scanned}
+              onScan={handleScan}
             />
-          )}
-        </>
-      )}
-    </View>
+            <Text style={tailwind("text-base m-5")}>{text}</Text>
+            {scanned && (
+              <Button
+                title={"Scan again?"}
+                onPress={() => setScanned(false)}
+                color="tomato"
+              />
+            )}
+          </>
+        )}
+      </View>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  mainText: {
-    fontSize: 16,
-    margin: 20,
-  },
-});
