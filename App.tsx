@@ -63,7 +63,7 @@ export default function App(): JSX.Element {
             </>
           )}
         </Box>
-        <ActionSheet />
+        <ActionSheet scanned={scanned}/>
       </SafeAreaView>
     </NativeBaseProvider>
   );
