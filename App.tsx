@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Button, SafeAreaView } from "react-native";
-import {
-  BarCodeScanner,
-  BarCodeScannedCallback,
-  BarCodeScannerResult,
-} from "expo-barcode-scanner";
+import { SafeAreaView } from "react-native";
+import { BarCodeScanner, BarCodeScannedCallback } from "expo-barcode-scanner";
 import Scanner from "./components/Scanner";
-import { useTailwind } from "tailwind-rn";
+import ScannedProfile from "./components/ScannedProfile";
+import { NativeBaseProvider, Box, Text, Button, Center } from "native-base";
+import ActionSheet from "./components/ActionSheet";
 
 export default function App(): JSX.Element {
-  const tailwind = useTailwind();
-
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
   const [text, setText] = useState<string>("Not yet scanned");
@@ -26,9 +22,7 @@ export default function App(): JSX.Element {
     askForCamPermission();
   }, []);
 
-  const handleScan: BarCodeScannedCallback = (
-    scanningResult: BarCodeScannerResult
-  ) => {
+  const handleScan: BarCodeScannedCallback = (scanningResult) => {
     setScanned(true);
     setText(scanningResult.data);
     console.log(
@@ -37,37 +31,40 @@ export default function App(): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={tailwind("h-full")}>
-      <View style={tailwind("flex-1 bg-white items-center justify-center")}>
-        {hasPermission === null && (
-          <Text style={tailwind("text-base")}>
-            Requesting for camera permission
-          </Text>
-        )}
-        {hasPermission === false && (
-          <View style={tailwind("p-4")}>
-            <Text style={tailwind("text-base m-2")}>No access to camera</Text>
-            <Button title={"Allow Camera"} onPress={askForCamPermission} />
-          </View>
-        )}
-        {hasPermission && (
-          <>
-            <Scanner
-              hasPermission={hasPermission}
-              scanned={scanned}
-              onScan={handleScan}
-            />
-            <Text style={tailwind("text-base m-5")}>{text}</Text>
-            {scanned && (
-              <Button
-                title={"Scan again?"}
-                onPress={() => setScanned(false)}
-                color="tomato"
+    <NativeBaseProvider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Box flex={1} bg="white" alignItems="center" justifyContent="center">
+          {hasPermission === null && (
+            <Text fontSize="md">Requesting for camera permission</Text>
+          )}
+          {hasPermission === false && (
+            <Box p={4}>
+              <Text fontSize="md" my={2}>
+                No access to camera
+              </Text>
+              <Button onPress={askForCamPermission}>Allow Camera</Button>
+            </Box>
+          )}
+          {hasPermission && (
+            <>
+              <Scanner
+                hasPermission={hasPermission}
+                scanned={scanned}
+                onScan={handleScan}
               />
-            )}
-          </>
-        )}
-      </View>
-    </SafeAreaView>
+              <Text fontSize="md" m={5}>
+                {text}
+              </Text>
+              {scanned && (
+                <Button onPress={() => setScanned(false)} colorScheme="danger">
+                  Scan again?
+                </Button>
+              )}
+            </>
+          )}
+        </Box>
+        <ActionSheet />
+      </SafeAreaView>
+    </NativeBaseProvider>
   );
 }
