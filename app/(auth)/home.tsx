@@ -1,12 +1,28 @@
-import React, { useState, useEffect } from "react";
+import { View, Text } from 'react-native';
+import React from 'react';
+import { useUser } from '@clerk/clerk-expo';
+
+const Home = () => {
+  const { user } = useUser();
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Welcome, {user?.emailAddresses[0].emailAddress} 🎉</Text>
+    </View>
+  );
+};
+
+export default Home;
+
+/*import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native";
 import { BarCodeScanner, BarCodeScannedCallback } from "expo-barcode-scanner";
-import Scanner from "./components/Scanner";
-import ScannedProfile from "./components/ScannedProfile";
+import Scanner from "../components/Scanner";
+import ScannedProfile from "../components/ScannedProfile";
 import { NativeBaseProvider, Box, Text, Button, Center } from "native-base";
-import ActionSheet from "./components/ActionSheet";
+import ActionSheet from "../components/ActionSheet";
 
-export default function App(): JSX.Element {
+export default function Home(): JSX.Element {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
   const [text, setText] = useState<string>("Not yet scanned");
@@ -67,4 +83,4 @@ export default function App(): JSX.Element {
       </SafeAreaView>
     </NativeBaseProvider>
   );
-}
+}*/

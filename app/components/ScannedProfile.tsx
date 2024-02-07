@@ -1,6 +1,6 @@
 import React from "react";
 import { View, SafeAreaView, Image } from "react-native";
-const pic = require("../assets/mockProfile.png");
+const pic = require("../../assets/mockProfile.png");
 
 export default function ScannedProfile() {
   return (
