@@ -1,6 +1,7 @@
 import { View, Text } from 'react-native';
 import React from 'react';
 import { useUser } from '@clerk/clerk-expo';
+import SignOutButton from '../components/SignOutButton'
 
 const Home = () => {
   const { user } = useUser();
@@ -8,6 +9,7 @@ const Home = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Welcome, {user?.phoneNumbers[0].phoneNumber} 🎉</Text>
+      <SignOutButton />
     </View>
   );
 };
