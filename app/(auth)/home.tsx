@@ -7,7 +7,7 @@ const Home = () => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Welcome, {user?.emailAddresses[0].emailAddress} 🎉</Text>
+      <Text>Welcome, {user?.phoneNumbers[0].phoneNumber} 🎉</Text>
     </View>
   );
 };
