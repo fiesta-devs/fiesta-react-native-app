@@ -3,6 +3,7 @@ import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import { Slot, useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import { NativeBaseProvider } from 'native-base';
 
 const CLERK_PUBLISHABLE_KEY = 'pk_test_aW50ZW5zZS1jaG93LTg0LmNsZXJrLmFjY291bnRzLmRldiQ';
 
@@ -47,9 +48,11 @@ const tokenCache = {
 
 const RootLayout = () => {
   return (
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY} tokenCache={tokenCache}>
-      <InitialLayout />
-    </ClerkProvider>
+    <NativeBaseProvider>
+      <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY} tokenCache={tokenCache}>
+        <InitialLayout />
+      </ClerkProvider>
+    </NativeBaseProvider>
   );
 };
 

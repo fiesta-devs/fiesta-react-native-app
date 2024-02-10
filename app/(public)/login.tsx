@@ -1,6 +1,6 @@
 import { useSignIn, isClerkAPIResponseError } from '@clerk/clerk-expo';
 import { Link } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput, Button, Pressable, Text, Alert } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { PhoneCodeFactor, SignInFirstFactor } from "@clerk/types";
@@ -14,6 +14,47 @@ const Login = () => {
   const [phoneError, setPhoneError] = React.useState("");
   const [code, setCode] = React.useState("");
   const [codeError, setCodeError] = React.useState("");
+
+  const handlePhoneChange = (newPhone) => {
+    setPhone(newPhone);
+    setPhoneError('');
+  };
+
+  const [disableSendCode, setDisableSendCode] = useState(false);
+
+  const handleCodeChange = () => {
+    onSignInPress(); // Call your existing function
+    setDisableSendCode(true); // Disable the button
+
+    // Enable the button after 30 seconds
+    setTimeout(() => {
+      setDisableSendCode(false);
+    }, 30000); // 30 seconds
+  };
+
+  useEffect(() => {
+    let timeoutId;
+
+    if (disableSendCode) {
+      // Set up the timeout and store its ID
+      timeoutId = setTimeout(() => {
+        setDisableSendCode(false);
+      }, 30000); // 30 seconds
+    }
+
+    // Cleanup function to clear the timeout if the component unmounts
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [disableSendCode]);
+
+  const backButton = () => {
+    window.location.reload();    
+    setVerifying(false); 
+    setPhone('')
+  }
 
   const onSignInPress = async () => {
     if (!isLoaded && !signIn) return null;
@@ -99,7 +140,6 @@ const Login = () => {
     return (
         <View style={styles.container}>
           <Spinner visible={loading} />
-            {/* Assuming you have a form handling function similar to handleVerification */}
             <View>
                 <Text >Let's make sure this is you.</Text>
                 <Text >
@@ -111,14 +151,26 @@ const Login = () => {
                     autoComplete='one-time-code'
                     placeholder="Enter Code"
                     value={code}
-                    onChangeText={setCode}
+                    onChangeText={handleCodeChange}
                     style={styles.inputField}
                 />
-                <Text style={styles.errorText}>{codeError}</Text>
+                {codeError ? <Text style={styles.errorText}>{codeError}</Text> : null}
                 <Button
-                    onPress={handleVerification} // Make sure this function handles the form submission logic appropriately
+                    onPress={handleVerification} 
                     title="Confirm"
                     color="#6c47ff"
+                    disabled={loading}
+                />
+                <Button
+                    onPress={onSignInPress} 
+                    title="Send Another Code"
+                    color="#6c47ff" 
+                    disabled={loading || disableSendCode} 
+                />
+                <Button
+                    onPress={backButton}
+                    title="Back"
+                    color='#ff0000'
                     disabled={loading}
                 />
             </View>
@@ -130,8 +182,8 @@ const Login = () => {
     <View style={styles.container}>
       <Spinner visible={loading} />
 
-      <TextInput autoCapitalize="none" keyboardType="numeric" placeholder="Enter phone number" placeholderTextColor={'#000'} value={phone} onChangeText={setPhone} style={styles.inputField} />
-
+      <TextInput textContentType='telephoneNumber' autoCapitalize="none" keyboardType="numeric" placeholder="Enter phone number" placeholderTextColor={'#000'} value={phone} onChangeText={handlePhoneChange} style={styles.inputField} />
+      {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
       <Button onPress={onSignInPress} title="Login" color={'#6c47ff'}></Button>
 
       <Link href="/register" asChild>
