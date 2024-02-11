@@ -1,7 +1,8 @@
 import { useSignIn, isClerkAPIResponseError } from '@clerk/clerk-expo';
 import { Link } from 'expo-router';
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TextInput, Button, Pressable, Text, Alert } from 'react-native';
+import { StyleSheet, TextInput, Button, Pressable } from 'react-native';
+import { Box, Text } from '@gluestack-ui/themed';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { PhoneCodeFactor, SignInFirstFactor } from "@clerk/types";
 
@@ -138,9 +139,9 @@ const Login = () => {
 
   if (verifying) {
     return (
-        <View style={styles.container}>
+        <Box style={styles.container}>
           <Spinner visible={loading} />
-            <View>
+            <Box>
                 <Text >Let's make sure this is you.</Text>
                 <Text >
                     Enter your six-digit verification code.
@@ -173,13 +174,13 @@ const Login = () => {
                     color='#ff0000'
                     disabled={loading}
                 />
-            </View>
-        </View>
+            </Box>
+        </Box>
     );
 }
 
   return (
-    <View style={styles.container}>
+    <Box style={styles.container}>
       <Spinner visible={loading} />
 
       <TextInput textContentType='telephoneNumber' autoCapitalize="none" keyboardType="numeric" placeholder="Enter phone number" placeholderTextColor={'#000'} value={phone} onChangeText={handlePhoneChange} style={styles.inputField} />
@@ -191,7 +192,7 @@ const Login = () => {
           <Text>Create Account</Text>
         </Pressable>
       </Link>
-    </View>
+    </Box>
   );
 };
 
