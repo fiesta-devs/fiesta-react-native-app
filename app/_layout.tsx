@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config" 
 
-const CLERK_PUBLISHABLE_KEY = 'pk_test_aW50ZW5zZS1jaG93LTg0LmNsZXJrLmFjY291bnRzLmRldiQ';
+const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 const InitialLayout = () => {
   const { isLoaded, isSignedIn } = useAuth();

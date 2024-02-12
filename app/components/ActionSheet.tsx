@@ -1,47 +1,51 @@
 import React from "react";
 import {
   Actionsheet,
+  ActionsheetContent,
+  ActionsheetDragIndicatorWrapper,
+  ActionsheetDragIndicator,
+  ActionsheetIcon,
+  ActionsheetItem,
+  ActionsheetItemText,
   Box,
-  Button,
-  Text,
-  useDisclose,
   Center,
-  Icon,
-} from "native-base";
+} from "@gluestack-ui/themed";
 import { Path } from "react-native-svg";
-import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import ScannedProfile from "./ScannedProfile";
+import Icon from "./Icon";
 
 export default function ActionSheet({ scanned }: { scanned: boolean }) {
-  const { onClose } = useDisclose();
+  const [showActionsheet, setShowActionsheet] = React.useState(false);
+  const handleClose = () => setShowActionsheet(!showActionsheet);
   return (
     <Center>
-      <Actionsheet isOpen={scanned} onClose={onClose} size="full">
-        <Actionsheet.Content>
+      <Actionsheet isOpen={scanned} onClose={handleClose} zIndex={999}>
+        <ActionsheetDragIndicatorWrapper>
+          <ActionsheetDragIndicator />
+        </ActionsheetDragIndicatorWrapper>
+        <ActionsheetContent>
           <Box w="100%" h={400} px={4} justifyContent="center">
             <ScannedProfile />
           </Box>
-          <Actionsheet.Item
-            startIcon={<Icon as={MaterialIcons} size="6" name="check" />}
-          >
-            Get 'em in
-          </Actionsheet.Item>
-          <Actionsheet.Item
-            startIcon={<Icon as={MaterialIcons} size="6" name="warning" />}
-          >
-            Come back later
-          </Actionsheet.Item>
-          <Actionsheet.Item
-            onPress={onClose}
-            startIcon={
-              <Icon viewBox="0 0 24 24" size="6" fill="none">
-                <Path d="M12.0007 10.5862L16.9507 5.63623L18.3647 7.05023L13.4147 12.0002L18.3647 16.9502L16.9507 18.3642L12.0007 13.4142L7.05072 18.3642L5.63672 16.9502L10.5867 12.0002L5.63672 7.05023L7.05072 5.63623L12.0007 10.5862Z" />
-              </Icon>
-            }
-          >
-            GTFO
-          </Actionsheet.Item>
-        </Actionsheet.Content>
+          <ActionsheetItem onPress={handleClose}>
+            <ActionsheetIcon>
+              <Icon name="check" />
+            </ActionsheetIcon>
+            <ActionsheetItemText>Get 'em in</ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={handleClose}>
+            <ActionsheetIcon>
+              <Icon name="warning" />
+            </ActionsheetIcon>
+            <ActionsheetItemText>Come back later</ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={handleClose}>
+            <ActionsheetIcon>
+            <Icon name="close" />
+            </ActionsheetIcon>
+            <ActionsheetItemText>GTFO</ActionsheetItemText>
+          </ActionsheetItem>
+        </ActionsheetContent>
       </Actionsheet>
     </Center>
   );

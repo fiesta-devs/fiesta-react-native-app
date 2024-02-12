@@ -1,6 +1,6 @@
 import React from "react";
 import { BarCodeScanner, BarCodeScannedCallback } from "expo-barcode-scanner";
-import { Box } from "native-base";
+import { Box } from '@gluestack-ui/themed';
 
 type ScannerProps = {
   hasPermission: boolean | null;
@@ -20,10 +20,10 @@ function Scanner({ hasPermission, scanned, onScan }: ScannerProps) {
         bg="tomato"
         alignItems="center"
         justifyContent="center"
-        height="300px"
-        width="300px"
+        h={300}
+        w={300}
         overflow="hidden"
-        borderRadius="lg"
+        borderRadius="$lg"
       >
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : onScan}

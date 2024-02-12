@@ -23,18 +23,13 @@ const Login = () => {
 
   const [disableSendCode, setDisableSendCode] = useState(false);
 
-  const handleCodeChange = () => {
-    onSignInPress(); // Call your existing function
-    setDisableSendCode(true); // Disable the button
-
-    // Enable the button after 30 seconds
-    setTimeout(() => {
-      setDisableSendCode(false);
-    }, 30000); // 30 seconds
+  const handleCodeChange = (newCode) => {
+    setCode(newCode);
+    setCodeError('');
   };
 
   useEffect(() => {
-    let timeoutId;
+    let timeoutId : NodeJS.Timeout;
 
     if (disableSendCode) {
       // Set up the timeout and store its ID
@@ -59,6 +54,7 @@ const Login = () => {
 
   const onSignInPress = async () => {
     if (!isLoaded && !signIn) return null;
+    setDisableSendCode(true);
 
     setLoading(true);
     try {
@@ -166,7 +162,7 @@ const Login = () => {
                     onPress={onSignInPress} 
                     title="Send Another Code"
                     color="#6c47ff" 
-                    disabled={loading || disableSendCode} 
+                    disabled={disableSendCode || loading} 
                 />
                 <Button
                     onPress={backButton}
