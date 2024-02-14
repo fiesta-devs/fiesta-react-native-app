@@ -9,7 +9,7 @@ const Profile = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text style={{ textAlign: 'center' }}>
-        Good morning {user.firstName} {user.lastName}!
+        {user.firstName} {user.lastName}
       </Text>
       <Avatar bgColor=/*{`${user.color}`}*/"$amber800" size="md" borderRadius="$full">
         {/*<AvatarFallbackText>{user.fullName}</AvatarFallbackText>*/ <AvatarFallbackText>Drew Amunategui</AvatarFallbackText>}

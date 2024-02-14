@@ -12,7 +12,7 @@ export const LogoutButton = () => {
 
   return (
     <Pressable onPress={doLogout} style={{ marginRight: 10 }}>
-      <Ionicons name="log-out-outline" size={24} color={'#fff'} />
+      <Ionicons name="log-out-outline" size={24} color={'#FF025B'} />
     </Pressable>
   );
 };
@@ -24,7 +24,7 @@ const TabsPage = () => {
     <Tabs
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#6c47ff',
+          backgroundColor: '#FF025B',
         },
         headerTintColor: '#fff',
       }}>
@@ -38,7 +38,7 @@ const TabsPage = () => {
         redirect={!isSignedIn}
       />
       <Tabs.Screen
-        name="liveFeed"
+        name="livefeed"
         options={{
           headerTitle: 'Live Feed',
           tabBarIcon: ({ color, size }) => <Ionicons name="eye-outline" size={size} color={color} />,

@@ -6,7 +6,7 @@ const PublicLayout = () => {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#6c47ff',
+          backgroundColor: '#FF025B',
         },
         headerTintColor: '#fff',
         headerBackTitle: 'Back',
@@ -15,11 +15,6 @@ const PublicLayout = () => {
         name="login"
         options={{
           headerTitle: 'Puerta',
-        }}></Stack.Screen>
-      <Stack.Screen
-        name="register"
-        options={{
-          headerTitle: 'Create Account',
         }}></Stack.Screen>
     </Stack>
   );
