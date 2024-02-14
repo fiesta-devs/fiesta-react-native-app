@@ -38,6 +38,15 @@ const TabsPage = () => {
         redirect={!isSignedIn}
       />
       <Tabs.Screen
+        name="liveFeed"
+        options={{
+          headerTitle: 'Live Feed',
+          tabBarIcon: ({ color, size }) => <Ionicons name="eye-outline" size={size} color={color} />,
+          tabBarLabel: 'Live Feed',
+        }}
+        redirect={!isSignedIn}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           headerTitle: 'My Profile',
