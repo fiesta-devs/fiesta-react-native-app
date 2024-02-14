@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useUser } from "@clerk/clerk-expo";
+import { useAuth } from "@clerk/clerk-expo";
 import { SafeAreaView, Box, Text, Button } from "@gluestack-ui/themed";
 import { BarCodeScanner, BarCodeScannedCallback } from "expo-barcode-scanner";
 import Scanner from "../components/Scanner";
 import ScanDrawer from "../components/ScanDrawer";
+import { getEvents, getUserProfile } from "../../hooks/endpoints";
 
 const Scan = () => {
-  const { user } = useUser();
+  const { getToken } = useAuth();
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
   const [text, setText] = useState<string>("Not yet scanned");
