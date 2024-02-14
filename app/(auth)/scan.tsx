@@ -11,6 +11,9 @@ const Scan = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
   const [text, setText] = useState<string>("Not yet scanned");
+  const [events, setEvents] = useState([]);
+  const [userProfile, setUserProfile] = useState(null);
+
 
   const askForCamPermission = () => {
     (async () => {
@@ -21,7 +24,20 @@ const Scan = () => {
 
   useEffect(() => {
     askForCamPermission();
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const token = await getToken();
+      const userProfileData = await getUserProfile(token);
+      //const eventsData = await getEvents(token);
+      setUserProfile(userProfileData);
+      //setEvents(eventsData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   const handleScan: BarCodeScannedCallback = (scanningResult) => {
     setScanned(true);
