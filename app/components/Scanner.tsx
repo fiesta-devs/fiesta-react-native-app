@@ -1,6 +1,6 @@
 import React from "react";
 import { BarCodeScanner, BarCodeScannedCallback } from "expo-barcode-scanner";
-import { Box } from '@gluestack-ui/themed';
+import { Box } from "@gluestack-ui/themed";
 
 type ScannerProps = {
   hasPermission: boolean | null;
@@ -9,7 +9,6 @@ type ScannerProps = {
 };
 
 function Scanner({ hasPermission, scanned, onScan }: ScannerProps) {
-
   if (hasPermission === null || hasPermission === false) {
     return null;
   }

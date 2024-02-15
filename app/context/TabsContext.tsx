@@ -5,12 +5,12 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { getUserProfile, getEvents } from "../../hooks/endpoints";
+import { getUserProfile, getLiveEvents } from "../../hooks/endpoints";
 import { useAuth } from "@clerk/clerk-expo";
 
 interface TabsContextType {
-  events: any[]; // Replace 'any' with the appropriate type for your events
-  setEvents: (events: any[]) => void;
+  liveEvents: any[]; // Replace 'any' with the appropriate type for your events
+  setLiveEvents: (events: any[]) => void;
   userProfile: any | null; // Replace 'any' with the appropriate type for your user profile
   setUserProfile: (userProfile: any | null) => void;
 }
@@ -29,10 +29,14 @@ interface TabsProviderProps {
   children: ReactNode;
 }
 
+interface Auth {
+  getToken: () => Promise<string>;
+}
+
 export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
-  const [events, setEvents] = useState<any[]>([]);
+  const [liveEvents, setLiveEvents] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any | null>(null);
-  const { getToken } = useAuth();
+  const { getToken }: Auth = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,8 +45,8 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
         const userProfileData = await getUserProfile(token);
         setUserProfile(userProfileData);
 
-        //const eventsData = await getEvents(token);
-        //setEvents(eventsData);
+        const eventsData = await getLiveEvents(token);
+        setLiveEvents(eventsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -53,7 +57,7 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
 
   return (
     <TabsContext.Provider
-      value={{ events, setEvents, userProfile, setUserProfile }}
+      value={{ liveEvents, setLiveEvents, userProfile, setUserProfile }}
     >
       {children}
     </TabsContext.Provider>

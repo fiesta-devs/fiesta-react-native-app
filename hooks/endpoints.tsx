@@ -18,9 +18,9 @@ export const getUserProfile = async (token) => {
 };
 
 //get events
-export const getEvents = async (token) => {
+export const getLiveEvents = async (token) => {
   try {
-    const response = await axios.get(`${BASE_URL}/events`, {
+    const response = await axios.get(`${BASE_URL}/event/live`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,9 +33,17 @@ export const getEvents = async (token) => {
 };
 
 // Example PUT request
-export const updateData = async (id, data) => {
+export const scan = async (token, userId, eventId) => {
   try {
-    const response = await axios.put(`${BASE_URL}/data/${id}`, data);
+    const response = await axios.post(
+      `${BASE_URL}/scan`,
+      { userId: userId, eventId: eventId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error updating data:", error);

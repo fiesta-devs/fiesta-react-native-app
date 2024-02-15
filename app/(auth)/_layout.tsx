@@ -25,16 +25,14 @@ const TabsPage = () => {
     <TabsProvider>
       <Tabs
         screenOptions={{
-          headerStyle: {
-            backgroundColor: "#FF025B",
-          },
-          headerTintColor: "#fff",
+          headerShown: false,
+          headerTransparent: true,
+          tabBarActiveTintColor: "#FF025B",
         }}
       >
         <Tabs.Screen
           name="livefeed"
           options={{
-            headerTitle: "Live Feed",
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="eye-outline" size={size} color={color} />
             ),
@@ -45,7 +43,6 @@ const TabsPage = () => {
         <Tabs.Screen
           name="scan"
           options={{
-            headerTitle: "Scan",
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="scan" size={size} color={color} />
             ),
@@ -56,12 +53,10 @@ const TabsPage = () => {
         <Tabs.Screen
           name="profile"
           options={{
-            headerTitle: "My Profile",
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="person-outline" size={size} color={color} />
             ),
             tabBarLabel: "My Profile",
-            headerRight: () => <LogoutButton />,
           }}
           redirect={!isSignedIn}
         />
