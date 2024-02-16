@@ -9,43 +9,65 @@ import {
   ActionsheetItemText,
   Box,
   Center,
-  Icon,
-  CheckIcon,
-  AlertCircleIcon,
-  CloseIcon,
+  Button,
+  Text,
 } from "@gluestack-ui/themed";
 import ScannedProfile from "./ScannedProfile";
-import { scan } from "../../hooks/endpoints";
+import { postScan } from "../../hooks/endpoints";
 import { useAuth } from "@clerk/clerk-expo";
 
 export default function ScanDrawer({
   scanned,
   scanValue,
   eventId,
+  setScanned,
 }: {
   scanned: boolean;
   scanValue: string;
   eventId: string;
+  setScanned: any;
 }) {
-  const [showActionsheet, setShowActionsheet] = React.useState(false);
   const { getToken } = useAuth();
-  const [name, setName] = React.useState<string>("");
+  const [scannedUser, setScannedUser] = React.useState<{
+    firstName: string;
+    lastName: string;
+    profilePicture: string;
+  }>(null);
+  const [scan, setScan] = React.useState<{
+    accepted: boolean;
+    createdAt: Date;
+    eventId: string;
+    id: string;
+    inviteId: string;
+    scannedBy: string;
+    userId: string;
+  }>(null);
+  const [error, setError] = React.useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = await getToken();
-        const scanData = await scan(token, scanValue, eventId);
-        setName(scanData);
+        const scanData = await postScan(token, scanValue, eventId);
+        setScannedUser(scanData.user);
+        setScan(scanData.scan);
+        console.log(scanData);
       } catch (error) {
+        setError(true);
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchData();
+    if (scanValue !== null) {
+      fetchData();
+    }
   }, [scanValue]);
 
-  const handleClose = () => setShowActionsheet(!showActionsheet);
+  function handleClose() {
+    setScanned(false);
+    setError(false);
+  }
+
   return (
     <Center>
       <Actionsheet isOpen={scanned} onClose={handleClose} zIndex={999}>
@@ -53,27 +75,20 @@ export default function ScanDrawer({
           <ActionsheetDragIndicatorWrapper>
             <ActionsheetDragIndicator />
           </ActionsheetDragIndicatorWrapper>
-          <Box w="100%" h={400} px={4} justifyContent="center">
-            <ScannedProfile />
-          </Box>
-          <ActionsheetItem onPress={handleClose}>
-            <ActionsheetIcon>
-              <Icon as={CheckIcon} />
-            </ActionsheetIcon>
-            <ActionsheetItemText>{name}</ActionsheetItemText>
-            <ActionsheetItemText>Get 'em in</ActionsheetItemText>
-          </ActionsheetItem>
-          <ActionsheetItem onPress={handleClose}>
-            <ActionsheetIcon>
-              <Icon as={AlertCircleIcon} />
-            </ActionsheetIcon>
-            <ActionsheetItemText>Come back later</ActionsheetItemText>
-          </ActionsheetItem>
-          <ActionsheetItem onPress={handleClose}>
-            <ActionsheetIcon>
-              <Icon as={CloseIcon} />
-            </ActionsheetIcon>
-            <ActionsheetItemText>GTFO</ActionsheetItemText>
+
+          {error ? (
+            <Box w="100%" h={400} px={4} justifyContent="center">
+              <Text>Error</Text>
+            </Box>
+          ) : (
+            <Box w="100%" h={400} px={4} justifyContent="center">
+              <ScannedProfile user={scannedUser} scan={scan} />
+            </Box>
+          )}
+          <ActionsheetItem>
+            <Button onPress={handleClose}>
+              <Text>Scan next</Text>
+            </Button>
           </ActionsheetItem>
         </ActionsheetContent>
       </Actionsheet>

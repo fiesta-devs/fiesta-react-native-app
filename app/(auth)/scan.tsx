@@ -94,6 +94,7 @@ const Scan = () => {
       )}
       <ScanDrawer
         scanned={scanned}
+        setScanned={setScanned}
         scanValue={scanValue}
         eventId={liveEvents[0]?.id}
       />

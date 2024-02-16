@@ -33,7 +33,7 @@ export const getLiveEvents = async (token) => {
 };
 
 // Example PUT request
-export const scan = async (token, userId, eventId) => {
+export const postScan = async (token, userId, eventId) => {
   try {
     const response = await axios.post(
       `${BASE_URL}/scan`,
@@ -47,17 +47,6 @@ export const scan = async (token, userId, eventId) => {
     return response.data;
   } catch (error) {
     console.error("Error updating data:", error);
-    throw error;
-  }
-};
-
-// Example DELETE request
-export const deleteData = async (id) => {
-  try {
-    const response = await axios.delete(`${BASE_URL}/data/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error deleting data:", error);
     throw error;
   }
 };
