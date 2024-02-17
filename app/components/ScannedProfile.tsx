@@ -21,12 +21,15 @@ export default function ScannedProfile({
   };
 }) {
   return (
-    <Box>
+    <Box justifyContent="center" alignItems="center" w={"$full"}>
+      <Text size="4xl">{scan?.accepted ? "LET 'EM IN" : "GTFO"}</Text>
       <Image
         source={{ uri: user?.profilePicture }}
         style={{ width: "75%", height: "75%" }}
         alt="profilePicture"
         resizeMode="cover"
+        borderColor={scan?.accepted ? "green" : "red"}
+        borderWidth={4}
       />
       <Text>Name: {user?.firstName + " " + user?.lastName}</Text>
       <Text>

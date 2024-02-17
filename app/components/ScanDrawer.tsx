@@ -11,6 +11,7 @@ import {
   Center,
   Button,
   Text,
+  Spinner,
 } from "@gluestack-ui/themed";
 import ScannedProfile from "./ScannedProfile";
 import { postScan } from "../../hooks/endpoints";
@@ -54,7 +55,6 @@ export default function ScanDrawer({
         console.log(scanData);
       } catch (error) {
         setError(true);
-        console.error("Error fetching data:", error);
       }
     };
 
@@ -68,30 +68,56 @@ export default function ScanDrawer({
     setError(false);
   }
 
-  return (
-    <Center>
-      <Actionsheet isOpen={scanned} onClose={handleClose} zIndex={999}>
-        <ActionsheetContent>
-          <ActionsheetDragIndicatorWrapper>
-            <ActionsheetDragIndicator />
-          </ActionsheetDragIndicatorWrapper>
-
-          {error ? (
-            <Box w="100%" h={400} px={4} justifyContent="center">
-              <Text>Error</Text>
-            </Box>
-          ) : (
-            <Box w="100%" h={400} px={4} justifyContent="center">
-              <ScannedProfile user={scannedUser} scan={scan} />
-            </Box>
-          )}
-          <ActionsheetItem>
-            <Button onPress={handleClose}>
-              <Text>Scan next</Text>
-            </Button>
-          </ActionsheetItem>
-        </ActionsheetContent>
-      </Actionsheet>
-    </Center>
-  );
+  if (scannedUser?.profilePicture || error) {
+    return (
+      <Center>
+        <Actionsheet isOpen={scanned} onClose={handleClose} zIndex={999}>
+          <ActionsheetContent>
+            <ActionsheetDragIndicatorWrapper>
+              <ActionsheetDragIndicator />
+            </ActionsheetDragIndicatorWrapper>
+            {error ? (
+              <Box
+                w="100%"
+                h={400}
+                px={4}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Text color="red" size="4xl">
+                  GTFO
+                </Text>
+                <Text color="red" size="xl">
+                  This code is NOT a valid invite
+                </Text>
+              </Box>
+            ) : (
+              <Box w="100%" h={400} px={4} justifyContent="center">
+                <ScannedProfile user={scannedUser} scan={scan} />
+              </Box>
+            )}
+            <ActionsheetItem>
+              <Box
+                justifyContent="center"
+                alignItems="center"
+                w={"$full"}
+                mb={"$10"}
+              >
+                <Button
+                  bgColor={scan?.accepted ? "green" : "red"}
+                  onPress={handleClose}
+                >
+                  <Text bold color="black">
+                    Scan next
+                  </Text>
+                </Button>
+              </Box>
+            </ActionsheetItem>
+          </ActionsheetContent>
+        </Actionsheet>
+      </Center>
+    );
+  } else {
+    return <Spinner />;
+  }
 }
