@@ -37,7 +37,7 @@ const Scan = () => {
 
   const openOrgDashboardInSafari = async () => {
     await Linking.openURL(
-      "https://fiesta-preview.fly.dev/organization/dashboard"
+      "https://thefiesta.app/organization/dashboard"
     );
   };
 
