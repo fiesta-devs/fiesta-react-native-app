@@ -19,6 +19,11 @@ const Scan = () => {
   const [scanValue, setScanValue] = useState<string | null>(null);
   const { liveEvents } = useTabsContext();
 
+  const resetState = () => {
+    setScanned(false);
+    setScanValue(null);
+  };
+
   const askForCamPermission = () => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -36,9 +41,7 @@ const Scan = () => {
   };
 
   const openOrgDashboardInSafari = async () => {
-    await Linking.openURL(
-      "https://thefiesta.app/organization/dashboard"
-    );
+    await Linking.openURL("https://thefiesta.app/organization/dashboard");
   };
 
   return (
@@ -94,7 +97,7 @@ const Scan = () => {
       )}
       <ScanDrawer
         scanned={scanned}
-        setScanned={setScanned}
+        resetState={resetState}
         scanValue={scanValue}
         eventId={liveEvents[0]?.id}
       />

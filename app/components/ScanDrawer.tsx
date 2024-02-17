@@ -21,12 +21,12 @@ export default function ScanDrawer({
   scanned,
   scanValue,
   eventId,
-  setScanned,
+  resetState,
 }: {
   scanned: boolean;
   scanValue: string;
   eventId: string;
-  setScanned: any;
+  resetState: any;
 }) {
   const { getToken } = useAuth();
   const [scannedUser, setScannedUser] = React.useState<{
@@ -64,7 +64,7 @@ export default function ScanDrawer({
   }, [scanValue]);
 
   function handleClose() {
-    setScanned(false);
+    resetState();
     setError(false);
   }
 
