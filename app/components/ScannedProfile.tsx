@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Image, Text } from "@gluestack-ui/themed";
+import { Avatar, AvatarImage, Box, Text } from "@gluestack-ui/themed";
 
 export default function ScannedProfile({
   user,
@@ -22,22 +22,40 @@ export default function ScannedProfile({
 }) {
   return (
     <Box justifyContent="center" alignItems="center" w={"$full"}>
-      <Text size="4xl">{scan?.accepted ? "LET 'EM IN" : "GTFO"}</Text>
-      <Image
-        source={{ uri: user?.profilePicture }}
-        style={{ width: "75%", height: "75%" }}
-        alt="profilePicture"
-        resizeMode="cover"
-        borderColor={scan?.accepted ? "green" : "red"}
-        borderWidth={4}
-      />
-      <Text>Name: {user?.firstName + " " + user?.lastName}</Text>
-      <Text>
+      <Avatar
+        bgColor=/*{`${user.color}`}*/ "$amber800"
+        size="2xl"
+        borderRadius="$full"
+        style={{ marginBottom: 15, marginTop: 25 }}
+      >
+        <AvatarImage
+          alt="profile picture"
+          source={{
+            uri: `${user?.profilePicture}`,
+          }}
+        />
+      </Avatar>
+      <Text size={"4xl"} fontWeight={"$semibold"} color="black">
+        {user?.firstName + " " + user?.lastName}
+      </Text>
+      <Box
+        bgColor={"#AFFF9C"}
+        borderRadius={"$full"}
+        w={"100%"}
+        h={"20%"}
+        justifyContent="center" 
+        alignItems="center"
+        mt={30}
+      >
+        <Text bold color="black">Get 'EM IN</Text>
+      </Box>
+
+      {/*<Text>
         {String(scan?.createdAt)}
         {/* {scan?.createdAt &&
           "Time: " +
-            (scan?.createdAt?.getHours() + ":" + scan?.createdAt?.getMinutes())} */}
-      </Text>
+            (scan?.createdAt?.getHours() + ":" + scan?.createdAt?.getMinutes())} }
+      </Text>*/}
     </Box>
   );
 }

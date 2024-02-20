@@ -78,11 +78,13 @@ const Scan = () => {
                 </Text>
               </Box>
 
-              <Scanner
-                hasPermission={hasPermission}
-                scanned={scanned}
-                onScan={handleScan}
-              />
+              {!scanned && (
+                <Scanner
+                  hasPermission={hasPermission}
+                  scanned={scanned}
+                  onScan={handleScan}
+                />
+              )}
               {/* <Text fontSize="$md" m={5}>
                   {text}
                 </Text> */}

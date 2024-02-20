@@ -14,6 +14,7 @@ import {
   Spinner,
 } from "@gluestack-ui/themed";
 import ScannedProfile from "./ScannedProfile";
+import ErrorProfile from "./ErrorProfile";
 import { postScan } from "../../hooks/endpoints";
 import { useAuth } from "@clerk/clerk-expo";
 
@@ -68,44 +69,49 @@ export default function ScanDrawer({
     setError(false);
   }
 
+  function getScanColor() {
+    return scan?.accepted ? "#E6FFE0" : "#FFE0E0";
+  }
+
   if (scannedUser?.profilePicture || error) {
     return (
       <Center>
-        <Actionsheet isOpen={scanned} onClose={handleClose} zIndex={999}>
-          <ActionsheetContent>
-            <ActionsheetDragIndicatorWrapper>
-              <ActionsheetDragIndicator />
+        <Actionsheet isOpen={scanned} onClose={handleClose}>
+          <ActionsheetContent bg={getScanColor()} h={"$3/4"}>
+            <ActionsheetDragIndicatorWrapper
+              mt={10}
+              position="absolute"
+              h={"$3/4"}
+              zIndex={998}
+            >
+              <ActionsheetDragIndicator h={"$1.5"} w={"$1/4"} />
             </ActionsheetDragIndicatorWrapper>
-            {error ? (
-              <Box
-                w="100%"
-                h={400}
-                px={4}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Text color="red" size="4xl">
-                  GTFO
-                </Text>
-                <Text color="red" size="xl">
-                  This code is NOT a valid invite
-                </Text>
-              </Box>
-            ) : (
-              <Box w="100%" h={400} px={4} justifyContent="center">
-                <ScannedProfile user={scannedUser} scan={scan} />
-              </Box>
-            )}
             <ActionsheetItem>
               <Box
+                h={"$1/2"}
                 justifyContent="center"
                 alignItems="center"
                 w={"$full"}
-                mb={"$10"}
+                mb={"$20"}
               >
+                <Box w="75%" px={4} justifyContent="center" bg={getScanColor()}>
+                  {error ? (
+                    <ErrorProfile user={scannedUser} scan={scan}/>
+                  ) : (
+                    <ScannedProfile user={scannedUser} scan={scan} />
+                  )}
+                </Box>
+              </Box>
+            </ActionsheetItem>
+            <ActionsheetItem>
+              <Box justifyContent="center" alignItems="center" w={"$full"}>
                 <Button
-                  bgColor={scan?.accepted ? "green" : "red"}
+                  bgColor={"white" /* scan?.accepted ? "green" : "red"*/}
                   onPress={handleClose}
+                  borderRadius={"$full"}
+                  w={"75%"}
+                  h={"30%"}
+                  zIndex={999}
                 >
                   <Text bold color="black">
                     Scan next

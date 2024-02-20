@@ -32,7 +32,7 @@ export const getLiveEvents = async (token) => {
   }
 };
 
-// Example PUT request
+//create a scan object
 export const postScan = async (token, userId, eventId) => {
   try {
     const response = await axios.post(
@@ -50,3 +50,19 @@ export const postScan = async (token, userId, eventId) => {
     throw error;
   }
 };
+
+//example number of accepted users at a live event
+export const getAcceptedUsersCount = async (token: string, eventId: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/event/${eventId}/accepted-count`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching accepted users count:", error);
+    throw error;
+  }
+};
+
