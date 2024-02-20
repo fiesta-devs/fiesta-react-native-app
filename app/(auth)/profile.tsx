@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "@gluestack-ui/themed";
+import { View, Text, SafeAreaView, Box } from "@gluestack-ui/themed";
 import SignOutButton from "../components/SignOutButton";
 import { Avatar, AvatarFallbackText, AvatarImage } from "@gluestack-ui/themed";
 import { useTabsContext } from "../context/TabsContext";
@@ -28,32 +28,41 @@ const Profile = () => {
   }, [userProfile]);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Avatar
-        bgColor=/*{`${user.color}`}*/ "$amber800"
-        size="2xl"
-        borderRadius="$full"
-        style={{ marginBottom: 20 }}
-      >
-        <AvatarFallbackText>{fullName}</AvatarFallbackText>
-        <AvatarImage
-          alt="profile picture"
-          source={{
-            uri: `${userProfile?.profilePicture}`,
-          }}
-        />
-      </Avatar>
-      <Text size="2xl" style={{ textAlign: "center", marginBottom: 10 }}>
-        {userProfile?.firstName} {userProfile?.lastName}
-      </Text>
-      <Text size="md" style={{ textAlign: "center" }}>
-        {userProfile?.phone}
-      </Text>
-      <Text size="2xs" style={{ textAlign: "center", marginBottom: 40 }}>
-        Joined on {joined}
-      </Text>
-      <SignOutButton />
-    </View>
+    <SafeAreaView h={"$full"} backgroundColor="white">
+      <Box flex={1} alignItems="center" gap={"$5"} px={"$4"} pt={"$20"}>
+        <Avatar
+          bgColor=/*{`${user.color}`}*/ "$amber800"
+          size="2xl"
+          borderRadius="$full"
+          style={{ marginBottom: 20 }}
+        >
+          <AvatarFallbackText>{fullName}</AvatarFallbackText>
+          <AvatarImage
+            alt="profile picture"
+            source={{
+              uri: `${userProfile?.profilePicture}`,
+            }}
+          />
+        </Avatar>
+        <Text
+          size="2xl"
+          fontWeight="$semibold"
+          color="$black"
+          style={{ marginBottom: 10 }}
+        >
+          {userProfile?.firstName} {userProfile?.lastName}
+        </Text>
+        <Text
+          size="xl"
+          marginBottom={"$10"}
+          fontWeight="$semibold"
+          color="$black"
+        >
+          Joined on {joined}
+        </Text>
+        <SignOutButton />
+      </Box>
+    </SafeAreaView>
   );
 };
 
