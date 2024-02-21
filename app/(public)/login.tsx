@@ -13,6 +13,7 @@ import {
 } from "@gluestack-ui/themed";
 import Spinner from "react-native-loading-spinner-overlay";
 import { PhoneCodeFactor, SignInFirstFactor } from "@clerk/types";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 const Login = () => {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -24,14 +25,20 @@ const Login = () => {
   const [code, setCode] = React.useState("");
   const [codeError, setCodeError] = React.useState("");
 
-  const handlePhoneChange = (newPhone) => {
+  const handlePhoneChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    const newPhone = e.nativeEvent.text;
     setPhone(newPhone);
     setPhoneError("");
   };
 
   const [disableSendCode, setDisableSendCode] = useState(false);
 
-  const handleCodeChange = (newCode) => {
+  const handleCodeChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    const newCode = e.nativeEvent.text;
     setCode(newCode);
     setCodeError("");
   };
@@ -160,7 +167,7 @@ const Login = () => {
             autoComplete="one-time-code"
             placeholder="Enter Code"
             value={code}
-            onChangeText={handleCodeChange}
+            onChange={handleCodeChange}
           />
           {codeError ? <Text>{codeError}</Text> : null}
           {/* <Button
@@ -230,6 +237,7 @@ const Login = () => {
               keyboardType="numeric"
               onChange={handlePhoneChange}
               value={phone}
+              color="white"
             />
           </Input>
           {phoneError ? <Text>{phoneError}</Text> : null}
