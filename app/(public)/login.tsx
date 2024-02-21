@@ -1,7 +1,15 @@
 import { useSignIn, isClerkAPIResponseError } from "@clerk/clerk-expo";
 import { Link } from "expo-router";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, TextInput, Pressable } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  Pressable,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import {
   Box,
   Text,
@@ -13,7 +21,6 @@ import {
 } from "@gluestack-ui/themed";
 import Spinner from "react-native-loading-spinner-overlay";
 import { PhoneCodeFactor, SignInFirstFactor } from "@clerk/types";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 const Login = () => {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -150,27 +157,28 @@ const Login = () => {
 
   if (verifying) {
     return (
-      <Box
-        w={"$full"}
-        h={"$full"}
-        flex={1}
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Spinner visible={loading} />
-        <Box>
-          <Text>Let's make sure this is you.</Text>
-          <Text>Enter your six-digit verification code.</Text>
-          <TextInput
-            id="code"
-            keyboardType="numeric"
-            autoComplete="one-time-code"
-            placeholder="Enter Code"
-            value={code}
-            onChange={handleCodeChange}
-          />
-          {codeError ? <Text>{codeError}</Text> : null}
-          {/* <Button
+      <SafeAreaView bg="$black" h={"$full"}>
+        <Box
+          w={"$full"}
+          h={"$full"}
+          flex={1}
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Spinner visible={loading} />
+          <Box>
+            <Text>Let's make sure this is you.</Text>
+            <Text>Enter your six-digit verification code.</Text>
+            <TextInput
+              id="code"
+              keyboardType="numeric"
+              autoComplete="one-time-code"
+              placeholder="Enter Code"
+              value={code}
+              onChange={handleCodeChange}
+            />
+            {codeError ? <Text>{codeError}</Text> : null}
+            {/* <Button
             onPress={handleVerification}
             title="Confirm"
             color="#6c47ff"
@@ -188,91 +196,96 @@ const Login = () => {
             color="#ff0000"
             disabled={loading}
           /> */}
+          </Box>
         </Box>
-      </Box>
+      </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView bg="$black" h={"$full"}>
-      <Box
-        w={"$full"}
-        h={"$full"}
-        px={"$4"}
-        // borderWidth={"$2"}
-        // borderColor="$white"
-      >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView bg="$black" h={"$full"}>
         <Box
-          mt={"$32"}
-          mb={"$20"}
-          position="relative"
+          w={"$full"}
+          h={"$full"}
+          px={"$4"}
           // borderWidth={"$2"}
           // borderColor="$white"
         >
-          <Text size="4xl" fontWeight="$semibold" color="$white">
-            Welcome to the party.
-          </Text>
-          <Text fontSize={"$xl"} color="$light500">
-            Login to Fiesta.
-          </Text>
-        </Box>
-        <Box gap={"$4"}>
-          <Text size="xl" color="$white" fontWeight="$semibold">
-            Phone number
-          </Text>
-          <Input
-            w={"$full"}
-            variant="outline"
-            borderColor="black"
-            h={"$16"}
-            rounded={"$full"}
-            size="xl"
-            bg="$light800"
+          <Box
+            mt={"$32"}
+            mb={"$20"}
+            position="relative"
+            // borderWidth={"$2"}
+            // borderColor="$white"
           >
-            <InputField
-              size="xl"
-              ml={"$2"}
-              placeholderTextColor={"$light400"}
-              placeholder="Phone number"
-              keyboardType="numeric"
-              onChange={handlePhoneChange}
-              value={phone}
-              color="white"
-            />
-          </Input>
-          {phoneError ? <Text>{phoneError}</Text> : null}
-          <Button
-            onPress={onSignInPress}
-            bg={"#FF025B"}
-            rounded={"$full"}
-            size="xl"
-            h={"$16"}
-          >
-            <ButtonText>Login</ButtonText>
-          </Button>
-          <Text
-            size="2xl"
-            color="$light300"
-            textAlign="center"
-            my={"$8"}
-            fontWeight="$semibold"
-          >
-            - or -
-          </Text>
-          <Link href="/register" asChild>
-            <Button
+            <Text size="4xl" fontWeight="$semibold" color="$white">
+              Welcome to the party.
+            </Text>
+            <Text fontSize={"$xl"} color="$light500">
+              Login to Fiesta.
+            </Text>
+          </Box>
+          <Box gap={"$4"}>
+            <Text size="xl" color="$white" fontWeight="$semibold">
+              Phone number
+            </Text>
+            <Input
+              w={"$full"}
               variant="outline"
+              borderColor="black"
+              h={"$16"}
               rounded={"$full"}
-              borderColor="$light500"
+              size="xl"
+              bg="$light800"
+            >
+              <InputField
+                size="xl"
+                ml={"$2"}
+                placeholderTextColor={"$light400"}
+                placeholder="Phone number"
+                keyboardType="numeric"
+                textContentType="telephoneNumber"
+                onChange={handlePhoneChange}
+                value={phone}
+                color="white"
+              />
+            </Input>
+
+            {phoneError ? <Text color="$rose600">{phoneError}</Text> : null}
+            <Button
+              onPress={onSignInPress}
+              bg={"#FF025B"}
+              rounded={"$full"}
+              size="xl"
               h={"$16"}
             >
-              <ButtonText color="$light300">Create Account</ButtonText>
+              <ButtonText>Login</ButtonText>
             </Button>
-          </Link>
+            <Text
+              size="2xl"
+              color="$light300"
+              textAlign="center"
+              my={"$8"}
+              fontWeight="$semibold"
+            >
+              - or -
+            </Text>
+            <Link href="/register" asChild>
+              <Button
+                variant="outline"
+                rounded={"$full"}
+                borderColor="$light500"
+                h={"$16"}
+              >
+                <ButtonText color="$light300">Create Account</ButtonText>
+              </Button>
+            </Link>
+          </Box>
+          {/* <Spinner visible={loading} /> */}
         </Box>
-        {/* <Spinner visible={loading} /> */}
-      </Box>
-    </SafeAreaView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
