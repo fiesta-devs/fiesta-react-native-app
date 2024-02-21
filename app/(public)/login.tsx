@@ -1,15 +1,23 @@
-import { useSignIn, isClerkAPIResponseError } from '@clerk/clerk-expo';
-import { Link } from 'expo-router';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, Button, Pressable } from 'react-native';
-import { Box, Text } from '@gluestack-ui/themed';
-import Spinner from 'react-native-loading-spinner-overlay';
+import { useSignIn, isClerkAPIResponseError } from "@clerk/clerk-expo";
+import { Link } from "expo-router";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, TextInput, Pressable } from "react-native";
+import {
+  Box,
+  Text,
+  Input,
+  Button,
+  ButtonText,
+  SafeAreaView,
+  InputField,
+} from "@gluestack-ui/themed";
+import Spinner from "react-native-loading-spinner-overlay";
 import { PhoneCodeFactor, SignInFirstFactor } from "@clerk/types";
 
 const Login = () => {
   const { signIn, setActive, isLoaded } = useSignIn();
 
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [phoneError, setPhoneError] = React.useState("");
@@ -18,18 +26,18 @@ const Login = () => {
 
   const handlePhoneChange = (newPhone) => {
     setPhone(newPhone);
-    setPhoneError('');
+    setPhoneError("");
   };
 
   const [disableSendCode, setDisableSendCode] = useState(false);
 
   const handleCodeChange = (newCode) => {
     setCode(newCode);
-    setCodeError('');
+    setCodeError("");
   };
 
   useEffect(() => {
-    let timeoutId : NodeJS.Timeout;
+    let timeoutId: NodeJS.Timeout;
 
     if (disableSendCode) {
       // Set up the timeout and store its ID
@@ -47,10 +55,10 @@ const Login = () => {
   }, [disableSendCode]);
 
   const backButton = () => {
-    window.location.reload();    
-    setVerifying(false); 
-    setPhone('')
-  }
+    window.location.reload();
+    setVerifying(false);
+    setPhone("");
+  };
 
   const onSignInPress = async () => {
     if (!isLoaded && !signIn) return null;
@@ -131,89 +139,133 @@ const Login = () => {
         setCodeError("An error occurred");
       }
     }
-  }
+  };
 
   if (verifying) {
     return (
-        <Box style={styles.container}>
-          <Spinner visible={loading} />
-            <Box>
-                <Text >Let's make sure this is you.</Text>
-                <Text >
-                    Enter your six-digit verification code.
-                </Text>
-                <TextInput
-                    id="code"
-                    keyboardType="numeric"
-                    autoComplete='one-time-code'
-                    placeholder="Enter Code"
-                    value={code}
-                    onChangeText={handleCodeChange}
-                    style={styles.inputField}
-                />
-                {codeError ? <Text style={styles.errorText}>{codeError}</Text> : null}
-                <Button
-                    onPress={handleVerification} 
-                    title="Confirm"
-                    color="#6c47ff"
-                    disabled={loading}
-                />
-                <Button
-                    onPress={onSignInPress} 
-                    title="Send Another Code"
-                    color="#6c47ff" 
-                    disabled={disableSendCode || loading} 
-                />
-                <Button
-                    onPress={backButton}
-                    title="Back"
-                    color='#ff0000'
-                    disabled={loading}
-                />
-            </Box>
+      <Box
+        w={"$full"}
+        h={"$full"}
+        flex={1}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Spinner visible={loading} />
+        <Box>
+          <Text>Let's make sure this is you.</Text>
+          <Text>Enter your six-digit verification code.</Text>
+          <TextInput
+            id="code"
+            keyboardType="numeric"
+            autoComplete="one-time-code"
+            placeholder="Enter Code"
+            value={code}
+            onChangeText={handleCodeChange}
+          />
+          {codeError ? <Text>{codeError}</Text> : null}
+          {/* <Button
+            onPress={handleVerification}
+            title="Confirm"
+            color="#6c47ff"
+            disabled={loading}
+          />
+          <Button
+            onPress={onSignInPress}
+            title="Send Another Code"
+            color="#6c47ff"
+            disabled={disableSendCode || loading}
+          />
+          <Button
+            onPress={backButton}
+            title="Back"
+            color="#ff0000"
+            disabled={loading}
+          /> */}
         </Box>
+      </Box>
     );
-}
+  }
 
   return (
-    <Box style={styles.container}>
-      <Spinner visible={loading} />
-
-      <TextInput textContentType='telephoneNumber' autoCapitalize="none" keyboardType="numeric" placeholder="Enter phone number" placeholderTextColor={'#000'} value={phone} onChangeText={handlePhoneChange} style={styles.inputField} />
-      {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
-      <Button onPress={onSignInPress} title="Login" color={'#6c47ff'}></Button>
-
-      <Link href="/register" asChild>
-        <Pressable style={styles.button}>
-          <Text>Create Account</Text>
-        </Pressable>
-      </Link>
-    </Box>
+    <SafeAreaView bg="$black" h={"$full"}>
+      <Box
+        w={"$full"}
+        h={"$full"}
+        px={"$4"}
+        // borderWidth={"$2"}
+        // borderColor="$white"
+      >
+        <Box
+          mt={"$32"}
+          mb={"$20"}
+          position="relative"
+          // borderWidth={"$2"}
+          // borderColor="$white"
+        >
+          <Text size="4xl" fontWeight="$semibold" color="$white">
+            Welcome to the party.
+          </Text>
+          <Text fontSize={"$xl"} color="$light500">
+            Login to Fiesta.
+          </Text>
+        </Box>
+        <Box gap={"$4"}>
+          <Text size="xl" color="$white" fontWeight="$semibold">
+            Phone number
+          </Text>
+          <Input
+            w={"$full"}
+            variant="outline"
+            borderColor="black"
+            h={"$16"}
+            rounded={"$full"}
+            size="xl"
+            bg="$light800"
+          >
+            <InputField
+              size="xl"
+              ml={"$2"}
+              placeholderTextColor={"$light400"}
+              placeholder="Phone number"
+              keyboardType="numeric"
+              onChange={handlePhoneChange}
+              value={phone}
+            />
+          </Input>
+          {phoneError ? <Text>{phoneError}</Text> : null}
+          <Button
+            onPress={onSignInPress}
+            bg={"#FF025B"}
+            rounded={"$full"}
+            size="xl"
+            h={"$16"}
+          >
+            <ButtonText>Login</ButtonText>
+          </Button>
+          <Text
+            size="2xl"
+            color="$light300"
+            textAlign="center"
+            my={"$8"}
+            fontWeight="$semibold"
+          >
+            - or -
+          </Text>
+          <Link href="/register" asChild>
+            <Button
+              variant="outline"
+              rounded={"$full"}
+              borderColor="$light500"
+              h={"$16"}
+            >
+              <ButtonText color="$light300">Create Account</ButtonText>
+            </Button>
+          </Link>
+        </Box>
+        {/* <Spinner visible={loading} /> */}
+      </Box>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  inputField: {
-    marginVertical: 4,
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#6c47ff',
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: '#fff',
-  },
-  button: {
-    margin: 8,
-    alignItems: 'center',
-  },
-  errorText: {
-    color: '#ff0000',
-  }
-});
 
 export default Login;

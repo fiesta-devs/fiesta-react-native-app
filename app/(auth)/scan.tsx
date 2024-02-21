@@ -45,12 +45,20 @@ const Scan = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView bg="$white" style={{ flex: 1 }}>
       {liveEvents.length === 0 ? (
         <Box flex={1} alignItems="center" justifyContent="center">
-          <Text paddingBottom={20}>Ready to party?</Text>
+          <Text size="3xl" paddingBottom={20} fontWeight="$semibold">
+            Ready to party?
+          </Text>
           {/* <Text paddingBottom={20}>Go start a live event!</Text> */}
-          <Button onPress={openOrgDashboardInSafari} bg="#FF025B">
+          <Button
+            onPress={openOrgDashboardInSafari}
+            bg="#FF025B"
+            // size="lg"
+            size="xl"
+            rounded={"$full"}
+          >
             <ButtonText>View events</ButtonText>
           </Button>
         </Box>
