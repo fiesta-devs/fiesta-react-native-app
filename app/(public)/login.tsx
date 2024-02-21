@@ -11,13 +11,16 @@ import {
   Keyboard,
 } from "react-native";
 import {
+  ArrowLeftIcon,
   Box,
   Text,
+  Icon,
   Input,
   Button,
   ButtonText,
   SafeAreaView,
   InputField,
+  RepeatIcon,
 } from "@gluestack-ui/themed";
 import Spinner from "react-native-loading-spinner-overlay";
 import { PhoneCodeFactor, SignInFirstFactor } from "@clerk/types";
@@ -69,7 +72,6 @@ const Login = () => {
   }, [disableSendCode]);
 
   const backButton = () => {
-    window.location.reload();
     setVerifying(false);
     setPhone("");
   };
@@ -146,6 +148,8 @@ const Login = () => {
           setCodeError("Verification failed");
         } else if (error.code === "form_code_incorrect") {
           setCodeError("Incorrect code");
+        } else if (code === "") {
+          setCodeError("Please enter a valid code");
         } else {
           setCodeError("Verification error");
         }
@@ -157,48 +161,75 @@ const Login = () => {
 
   if (verifying) {
     return (
-      <SafeAreaView bg="$black" h={"$full"}>
-        <Box
-          w={"$full"}
-          h={"$full"}
-          flex={1}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Spinner visible={loading} />
-          <Box>
-            <Text>Let's make sure this is you.</Text>
-            <Text>Enter your six-digit verification code.</Text>
-            <TextInput
-              id="code"
-              keyboardType="numeric"
-              autoComplete="one-time-code"
-              placeholder="Enter Code"
-              value={code}
-              onChange={handleCodeChange}
-            />
-            {codeError ? <Text>{codeError}</Text> : null}
-            {/* <Button
-            onPress={handleVerification}
-            title="Confirm"
-            color="#6c47ff"
-            disabled={loading}
-          />
-          <Button
-            onPress={onSignInPress}
-            title="Send Another Code"
-            color="#6c47ff"
-            disabled={disableSendCode || loading}
-          />
-          <Button
-            onPress={backButton}
-            title="Back"
-            color="#ff0000"
-            disabled={loading}
-          /> */}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <SafeAreaView bg="$black" h={"$full"}>
+          <Box w={"$full"} h={"$full"} px={"$4"}>
+            <Spinner visible={loading} />
+            <Box mt={"$24"} alignItems="baseline">
+              <Button onPress={backButton} variant="link" p={0}>
+                <Icon as={ArrowLeftIcon} size="xl" color="white" />
+              </Button>
+            </Box>
+            <Box mt={"$6"} mb={"$20"}>
+              <Text size="4xl" fontWeight="$semibold" color="$white">
+                Let's make sure this is you.
+              </Text>
+            </Box>
+            <Text fontSize={"$xl"} color="$light500">
+              Enter your six-digit verification code.
+            </Text>
+            <Box gap={"$4"}>
+              <Input
+                w={"$full"}
+                variant="outline"
+                borderColor="black"
+                h={"$16"}
+                rounded={"$full"}
+                size="xl"
+                bg="$light800"
+                mt={"$4"}
+              >
+                <InputField
+                  size="xl"
+                  ml={"$2"}
+                  placeholderTextColor={"$light400"}
+                  placeholder="Enter Code"
+                  keyboardType="numeric"
+                  textContentType="oneTimeCode"
+                  onChange={handleCodeChange}
+                  value={code}
+                  color="white"
+                />
+                <Box position="absolute" top={10} right={20}>
+                  <Button
+                    onPress={onSignInPress}
+                    variant="link"
+                    p={0}
+                    disabled={disableSendCode || loading}
+                  >
+                    <Icon
+                      as={RepeatIcon}
+                      size="xl"
+                      color={!disableSendCode && !loading ? "white" : "grey"}
+                    />
+                  </Button>
+                </Box>
+              </Input>
+              {codeError ? <Text color="$rose600">{codeError}</Text> : null}
+              <Button
+                onPress={handleVerification}
+                bg={"#6c47ff"}
+                rounded={"$full"}
+                size="xl"
+                h={"$16"}
+                disabled={loading}
+              >
+                <ButtonText>Confirm</ButtonText>
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </SafeAreaView>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
     );
   }
 
@@ -251,7 +282,6 @@ const Login = () => {
                 color="white"
               />
             </Input>
-
             {phoneError ? <Text color="$rose600">{phoneError}</Text> : null}
             <Button
               onPress={onSignInPress}
