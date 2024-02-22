@@ -44,7 +44,6 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
         const token = await getToken();
         const userProfileData = await getUserProfile(token);
         setUserProfile(userProfileData);
-
         const eventsData = await getLiveEvents(token);
         setLiveEvents(eventsData);
       } catch (error) {

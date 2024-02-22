@@ -18,14 +18,31 @@ export const getUserProfile = async (token) => {
 };
 
 //get events
-export const getLiveEvents = async (token) => {
+export const getEvents = async (token) => {
   try {
-    const response = await axios.get(`${BASE_URL}/event/live`, {
+    const response = await axios.get(`${BASE_URL}/org/events`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    throw error;
+  }
+};
+
+//get live events
+export const getLiveEvents = async (token) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/org/events`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // Filter events where live is true
+    const liveEvents = response.data.filter(event => event.live === true);
+    return liveEvents;
   } catch (error) {
     console.error("Error fetching events:", error);
     throw error;
