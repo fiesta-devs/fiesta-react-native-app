@@ -93,14 +93,6 @@ const Scan = () => {
                   onScan={handleScan}
                 />
               )}
-              {/* <Text fontSize="$md" m={5}>
-                  {text}
-                </Text> */}
-              {/* {scanned && (
-                <Button onPress={() => setScanned(false)} bg="danger">
-                  <Text>Scan again?</Text>
-                </Button>
-              )} */}
             </Box>
           )}
         </Box>

@@ -123,7 +123,9 @@ export default function ScanDrawer({
         </Actionsheet>
       </Center>
     );
-  } else {
+  } else if (scanned){
     return <Spinner />;
+  } else {
+    return null
   }
 }

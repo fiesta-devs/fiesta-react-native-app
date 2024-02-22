@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { getUserProfile, getLiveEvents } from "../../hooks/endpoints";
 import { useAuth } from "@clerk/clerk-expo";
+import { View, ActivityIndicator } from "react-native";
 
 interface TabsContextType {
   liveEvents: any[]; // Replace 'any' with the appropriate type for your events
@@ -36,6 +37,7 @@ interface Auth {
 export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
   const [liveEvents, setLiveEvents] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
   const { getToken }: Auth = useAuth();
 
   useEffect(() => {
@@ -48,11 +50,21 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
         setLiveEvents(eventsData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
 
     fetchData();
   }, [getToken]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <TabsContext.Provider
