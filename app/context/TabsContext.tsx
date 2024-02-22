@@ -40,6 +40,7 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const { getToken }: Auth = useAuth();
 
+  //gets user and events for the entire app once
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,6 +59,7 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
     fetchData();
   }, [getToken]);
 
+  //show loader until fetchData is complete
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -66,6 +68,7 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
     );
   }
 
+  //rendered once all data is fetched
   return (
     <TabsContext.Provider
       value={{ liveEvents, setLiveEvents, userProfile, setUserProfile }}

@@ -3,7 +3,7 @@ import axios from "axios";
 const BASE_URL = "https://scanner-api.fly.dev";
 
 //get user profile
-export const getUserProfile = async (token) => {
+export const getUserProfile = async (token : string) => {
   try {
     const response = await axios.get(`${BASE_URL}/user`, {
       headers: {
@@ -18,7 +18,7 @@ export const getUserProfile = async (token) => {
 };
 
 //get events
-export const getEvents = async (token) => {
+export const getEvents = async (token : string) => {
   try {
     const response = await axios.get(`${BASE_URL}/org/events`, {
       headers: {
@@ -33,7 +33,7 @@ export const getEvents = async (token) => {
 };
 
 //get live events
-export const getLiveEvents = async (token) => {
+export const getLiveEvents = async (token : string) => {
   try {
     const response = await axios.get(`${BASE_URL}/org/events`, {
       headers: {
@@ -50,7 +50,7 @@ export const getLiveEvents = async (token) => {
 };
 
 //create a scan object
-export const postScan = async (token, userId, eventId) => {
+export const postScan = async (token : string, userId : string, eventId : string) => {
   try {
     const response = await axios.post(
       `${BASE_URL}/scan`,
@@ -69,7 +69,7 @@ export const postScan = async (token, userId, eventId) => {
 };
 
 //example number of accepted users at a live event
-export const getAcceptedUsersCount = async (token: string, eventId: string) => {
+export const getAcceptedUsersCount = async (token : string, eventId : string) => {
   try {
     const response = await axios.get(`${BASE_URL}/event/${eventId}/accepted-count`, {
       headers: {
@@ -82,4 +82,20 @@ export const getAcceptedUsersCount = async (token: string, eventId: string) => {
     throw error;
   }
 };
+
+//get all users scanned at a live event
+export const getLiveScans = async (token : string, eventId : string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/scans/${eventId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users at party:", error);
+    throw error;
+  }
+};
+
 

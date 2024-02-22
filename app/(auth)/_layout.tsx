@@ -30,16 +30,16 @@ const TabsPage = () => {
           tabBarActiveTintColor: "#FF025B",
         }}
       >
-        {/* <Tabs.Screen
-          name="livefeed"
+        <Tabs.Screen
+          name="live"
           options={{
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="eye-outline" size={size} color={color} />
             ),
-            tabBarLabel: "Live Feed",
+            tabBarLabel: "Live",
           }}
           redirect={!isSignedIn}
-        /> */}
+        />
         <Tabs.Screen
           name="scan"
           options={{
