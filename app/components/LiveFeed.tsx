@@ -1,12 +1,6 @@
-import {
-  Box,
-  Text,
-  Avatar,
-  AvatarImage,
-  AvatarFallbackText,
-} from "@gluestack-ui/themed";
-import React from "react";
-import { format } from "date-fns";
+import React, { useCallback, useState } from "react";
+import { Box, RefreshControl, ScrollView, Text } from "@gluestack-ui/themed";
+import LiveFeedUser from "./LiveFeedUser";
 
 interface User {
   firstName: string;
@@ -22,52 +16,39 @@ interface Scan {
 
 interface LiveFeedProps {
   liveScans: Scan[] | null;
+  fetchScans: () => Promise<void>;
 }
 
-export default function LiveFeed({ liveScans }: LiveFeedProps) {
+export default function LiveFeed({ liveScans, fetchScans }: LiveFeedProps) {
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchScans();
+  }, [fetchScans]);
+
   return (
-    <Box mt={"$6"} mb={"$20"} px={"$2"}>
-      {liveScans?.map((scan: Scan, index) => (
-        <Box
-          key={index}
-          style={{
-            backgroundColor: scan.accepted ? "#e0ffe0" : "#ffe0e0",
-            borderRadius: 50,
-            borderColor: "#73737350",
-            padding: 10,
-            marginBottom: 5,
-            flexDirection: "row",
-            alignItems: "center",
-            borderWidth: 1,
-          }}
-        >
-          <Avatar
-            bgColor="$amber800"
-            size="lg"
-            borderRadius="$full"
-            style={{ marginVertical: 1, marginRight: 15 }}
-          >
-            <AvatarFallbackText>
-              {scan.user.firstName[0]}
-              {scan.user.lastName[0]}
-            </AvatarFallbackText>
-            <AvatarImage
-              alt={`${scan.user.firstName} ${scan.user.lastName}`}
-              source={{
-                uri: scan.user.profilePicture,
-              }}
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <Box mt={"$6"} mb={"$6"} px={"$2"}>
+        {liveScans?.length > 0 ? (
+          liveScans?.map((scan: Scan, index) => (
+            <LiveFeedUser
+              key={index}
+              accepted={scan.accepted}
+              firstName={scan.user.firstName}
+              lastName={scan.user.lastName}
+              profilePictureURI={scan.user.profilePicture}
+              createdAt={scan.createdAt}
             />
-          </Avatar>
-          <Box style={{ flexDirection: "column" }}>
-            <Text size="2xl" fontWeight="$semibold" color="$black">
-              {scan.user.firstName} {scan.user.lastName}
-            </Text>
-            <Text size="sm" color="$gray600">
-              {format(new Date(scan.createdAt), "MMM dd, yyyy h:mm a")}{" "}
-            </Text>
-          </Box>
-        </Box>
-      ))}
-    </Box>
+          ))
+        ) : (
+          <Text> {"No one at da party :("}</Text>
+        )}
+      </Box>
+    </ScrollView>
   );
 }
