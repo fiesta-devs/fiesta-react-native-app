@@ -19,7 +19,7 @@ export const LogoutButton = () => {
   );
 };
 
-const AdminTabsPage = () => {
+const UserTabsPage = () => {
   const { isSignedIn } = useAuth();
 
   return (
@@ -32,7 +32,7 @@ const AdminTabsPage = () => {
         }}
       >
         <Tabs.Screen
-          name="live"
+          name="userlive"
           options={{
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="eye-outline" size={size} color={color} />
@@ -42,17 +42,17 @@ const AdminTabsPage = () => {
           redirect={!isSignedIn}
         />
         <Tabs.Screen
-          name="scan"
+          name="userhome"
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="scan" size={size} color={color} />
+              <Ionicons name="home" size={size} color={color} />
             ),
-            tabBarLabel: "Scan",
+            tabBarLabel: "Home",
           }}
           redirect={!isSignedIn}
         />
         <Tabs.Screen
-          name="profile"
+          name="userprofile"
           options={{
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="person-outline" size={size} color={color} />
@@ -66,4 +66,4 @@ const AdminTabsPage = () => {
   );
 };
 
-export default AdminTabsPage;
+export default UserTabsPage;

@@ -12,12 +12,23 @@ import Scanner from "../components/Scanner";
 import ScanDrawer from "../components/ScanDrawer";
 import { useTabsContext } from "../context/TabsContext";
 import { Linking } from "react-native";
+import { useRouter } from "expo-router";
 
 const Scan = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
   const [scanValue, setScanValue] = useState<string | null>(null);
-  const { liveEvents } = useTabsContext();
+  const { liveEvents, userProfile } = useTabsContext(); // Destructure userProfile from useTabsContext
+  const { isSignedIn } = useAuth();
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   if (!isSignedIn) {
+  //     router.replace("Login");
+  //   } else if (userProfile && !userProfile.isAdmin) {
+  //     router.replace("UserHome");
+  //   }
+  // }, [isSignedIn, userProfile, router]);
 
   const resetState = () => {
     setScanned(false);
