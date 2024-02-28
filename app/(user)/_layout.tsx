@@ -1,5 +1,5 @@
-import React from 'react';
-import { Tabs } from 'expo-router';
+import React from "react";
+import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable } from "react-native";
 import { useAuth } from "@clerk/clerk-expo";
@@ -19,7 +19,7 @@ export const LogoutButton = () => {
   );
 };
 
-const UserTabsPage = () => {
+const TabsPage = () => {
   const { isSignedIn } = useAuth();
 
   return (
@@ -66,4 +66,4 @@ const UserTabsPage = () => {
   );
 };
 
-export default UserTabsPage;
+export default TabsPage;

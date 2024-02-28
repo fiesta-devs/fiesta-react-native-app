@@ -98,4 +98,6 @@ export const getLiveScans = async (token : string, eventId : string) => {
   }
 };
 
+//get invites
+
 

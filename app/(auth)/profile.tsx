@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, SafeAreaView, Box } from "@gluestack-ui/themed";
+import { Text, SafeAreaView, Box } from "@gluestack-ui/themed";
 import SignOutButton from "../components/SignOutButton";
 import { Avatar, AvatarFallbackText, AvatarImage } from "@gluestack-ui/themed";
 import { useTabsContext } from "../context/TabsContext";
