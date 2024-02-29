@@ -6,6 +6,7 @@ import { useTabsContext } from "../context/TabsContext";
 
 const Profile = () => {
   const { userProfile, setUserProfile } = useTabsContext();
+  console.log("Profile: " + userProfile);
   const fullName = `${userProfile?.firstName} ${userProfile?.lastName}`;
   const [joined, setJoined] = useState(null);
 

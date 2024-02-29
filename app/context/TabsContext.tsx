@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { getUserProfile, getLiveEvents } from "../../hooks/endpoints";
+import { getUserProfile, getLiveEvents, getInvites, getEvents } from "../../hooks/endpoints";
 import { useAuth } from "@clerk/clerk-expo";
 import { View, ActivityIndicator } from "react-native";
 
@@ -14,6 +14,8 @@ interface TabsContextType {
   setLiveEvents: (events: any[]) => void;
   userProfile: any | null; // Replace 'any' with the appropriate type for your user profile
   setUserProfile: (userProfile: any | null) => void;
+  invites: any[] | null;
+  events: any[] | null;
 }
 
 const TabsContext = createContext<TabsContextType | undefined>(undefined);
@@ -37,6 +39,8 @@ interface Auth {
 export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
   const [liveEvents, setLiveEvents] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any | null>(null);
+  const [invites, setInvites] = useState<any | null>(null);
+  const [events, setEvents] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const { getToken }: Auth = useAuth();
 
@@ -46,9 +50,14 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
       try {
         const token = await getToken();
         const userProfileData = await getUserProfile(token);
+        console.log("user: ", userProfileData);
         setUserProfile(userProfileData);
-        const eventsData = await getLiveEvents(token);
-        setLiveEvents(eventsData);
+        const liveEventsData = await getLiveEvents(token);
+        setLiveEvents(liveEventsData);
+        const invitesData = await getInvites(token);
+        setInvites(invitesData);
+        const eventsData = await getEvents(token);
+        setEvents(eventsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -71,7 +80,7 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
   //rendered once all data is fetched
   return (
     <TabsContext.Provider
-      value={{ liveEvents, setLiveEvents, userProfile, setUserProfile }}
+      value={{ liveEvents, setLiveEvents, userProfile, setUserProfile, invites, events}}
     >
       {children}
     </TabsContext.Provider>
