@@ -60,6 +60,9 @@ const Profile = () => {
         >
           Joined on {joined}
         </Text>
+        {/* invited, attended, groups*/}
+        {/* edit profile*/}
+        {/* show avatar past scroll avatar*/}
         <SignOutButton />
       </Box>
     </SafeAreaView>
