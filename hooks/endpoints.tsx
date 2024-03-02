@@ -22,9 +22,9 @@ const BASE_URL = "http://localhost:8080"; //TESTING
 export const getUserProfile = async (token: string) => {
   try {
     const response = await fetch(`${BASE_URL}/user`, {
-      method: 'GET', // GET is the default method, so this is optional
+      method: "GET", // GET is the default method, so this is optional
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -35,7 +35,6 @@ export const getUserProfile = async (token: string) => {
     const data = await response.json();
     console.log(data);
     return data;
-
   } catch (error) {
     console.error("Error fetching user profile:", error);
     throw error;
@@ -60,7 +59,7 @@ export const geOrgProfile = async (token: string) => {
 //get invites
 export const getInvites = async (token: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}/events`, {
+    const response = await axios.get(`${BASE_URL}/invites`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -73,19 +72,19 @@ export const getInvites = async (token: string) => {
 };
 
 //get events
-export const getEvents = async (token: string) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/events`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching events:", error);
-    throw error;
-  }
-};
+// export const getEvents = async (token: string) => {
+//   try {
+//     const response = await axios.get(`${BASE_URL}/events`, {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching events:", error);
+//     throw error;
+//   }
+// };
 
 //get events for an organization
 export const getOrgEvents = async (token: string) => {

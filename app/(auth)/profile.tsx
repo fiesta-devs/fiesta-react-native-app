@@ -30,12 +30,12 @@ const Profile = () => {
 
   return (
     <SafeAreaView h={"$full"} backgroundColor="white">
-      <Box flex={1} alignItems="center" gap={"$5"} px={"$4"} pt={"$20"}>
+      <Box flex={1} gap={"$1"} px={"$5"} pt={"$20"}>
         <Avatar
           bgColor=/*{`${user.color}`}*/ "$amber800"
           size="2xl"
           borderRadius="$full"
-          style={{ marginBottom: 20 }}
+          style={{ marginBottom: 10 }}
         >
           <AvatarFallbackText>{fullName}</AvatarFallbackText>
           <AvatarImage
@@ -49,15 +49,14 @@ const Profile = () => {
           size="2xl"
           fontWeight="$semibold"
           color="$black"
-          style={{ marginBottom: 10 }}
         >
           {userProfile?.firstName} {userProfile?.lastName}
         </Text>
         <Text
-          size="xl"
+          size="md"
           marginBottom={"$10"}
           fontWeight="$semibold"
-          color="$black"
+          color="#999999"
         >
           Joined on {joined}
         </Text>
