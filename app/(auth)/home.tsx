@@ -18,7 +18,9 @@ const sampleInvites = [
       "Join us for an exciting soccer match between our club's teams. Open to all members!",
     date: "2024-03-15",
     organization: "Alpha Epsilon Pi",
+    orgAcronym: "AEPi",
     school: "University of Florida",
+    schoolAcronym: "UF",
   },
   {
     name: "Tennis Tournament",
@@ -26,7 +28,9 @@ const sampleInvites = [
       "Compete in our annual tennis tournament and show off your skills on the court.",
     date: "2024-04-05",
     organization: "Beta Theta Pi",
+    orgAcronym: "Beta",
     school: "University of California, Berkeley",
+    schoolAcronym: "UCB",
   },
   {
     name: "Yoga in the Park",
@@ -34,7 +38,9 @@ const sampleInvites = [
       "Relax and unwind with a morning yoga session in the park. Suitable for all levels.",
     date: "2024-04-20",
     organization: "Delta Tau Delta",
+    orgAcronym: "DTD",
     school: "University of Texas at Austin",
+    schoolAcronym: "UT",
   },
   {
     name: "Club BBQ",
@@ -42,7 +48,9 @@ const sampleInvites = [
       "Enjoy delicious food and great company at our club's annual BBQ event.",
     date: "2024-05-10",
     organization: "Sigma Chi",
+    orgAcronym: "Sig Chi",
     school: "University of Michigan",
+    schoolAcronym: "UMich",
   },
   {
     name: "Swim Meet",
@@ -50,7 +58,9 @@ const sampleInvites = [
       "Cheer on our swimmers as they compete in various swimming events.",
     date: "2024-06-01",
     organization: "Kappa Sigma",
+    orgAcronym: "Kappa Sig",
     school: "Florida State University",
+    schoolAcronym: "FSU",
   },
   {
     name: "Golf Outing",
@@ -58,7 +68,9 @@ const sampleInvites = [
       "Tee off with fellow club members at our golf outing event. All skill levels welcome.",
     date: "2024-06-15",
     organization: "Phi Delta Theta",
+    orgAcronym: "Phi Delt",
     school: "University of Georgia",
+    schoolAcronym: "UGA",
   },
   {
     name: "Charity Run",
@@ -66,7 +78,9 @@ const sampleInvites = [
       "Participate in a charity run to support a good cause. Choose from different distances.",
     date: "2024-07-05",
     organization: "Sigma Alpha Epsilon",
+    orgAcronym: "SAE",
     school: "University of Southern California",
+    schoolAcronym: "USC",
   },
   {
     name: "Club Picnic",
@@ -74,7 +88,9 @@ const sampleInvites = [
       "Join us for a fun-filled day of games, food, and relaxation at our club picnic.",
     date: "2024-07-20",
     organization: "Alpha Tau Omega",
+    orgAcronym: "ATO",
     school: "University of Alabama",
+    schoolAcronym: "UA",
   },
   {
     name: "Dance Party",
@@ -82,7 +98,9 @@ const sampleInvites = [
       "Dance the night away at our club's dance party event. Music, lights, and fun guaranteed!",
     date: "2024-08-10",
     organization: "Lambda Chi Alpha",
+    orgAcronym: "Lambda Chi",
     school: "University of Illinois at Urbana-Champaign",
+    schoolAcronym: "UIUC",
   },
   {
     name: "Hiking Adventure",
@@ -90,20 +108,27 @@ const sampleInvites = [
       "Embark on a scenic hiking adventure with fellow club members. Explore nature and enjoy breathtaking views. We can't wait to see you here please come ready to party!",
     date: "2024-08-25",
     organization: "Pi Kappa Alpha",
+    orgAcronym: "Pike",
     school: "University of South Carolina",
+    schoolAcronym: "USC",
   },
 ];
 
 export default function Home() {
   //const { invites } = useTabsContext();
   const [searchQuery, setSearchQuery] = useState("");
+
   const invites = sampleInvites
     .filter(
       (invite) =>
         invite.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        invite.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        invite.orgAcronym.toLowerCase().includes(searchQuery.toLowerCase()) ||
         invite.organization.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        invite.school.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        invite.description.toLowerCase().includes(searchQuery.toLowerCase())
+        invite.schoolAcronym
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        invite.school.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .sort((a, b) => {
       if (searchQuery === "") {
@@ -113,9 +138,17 @@ export default function Home() {
       }
       if (a.name.toLowerCase().includes(searchQuery.toLowerCase())) return -1;
       if (b.name.toLowerCase().includes(searchQuery.toLowerCase())) return 1;
+      if (a.orgAcronym.toLowerCase().includes(searchQuery.toLowerCase()))
+        return -1;
+      if (b.orgAcronym.toLowerCase().includes(searchQuery.toLowerCase()))
+        return 1;
       if (a.organization.toLowerCase().includes(searchQuery.toLowerCase()))
         return -1;
       if (b.organization.toLowerCase().includes(searchQuery.toLowerCase()))
+        return 1;
+      if (a.schoolAcronym.toLowerCase().includes(searchQuery.toLowerCase()))
+        return -1;
+      if (b.schoolAcronym.toLowerCase().includes(searchQuery.toLowerCase()))
         return 1;
       if (a.school.toLowerCase().includes(searchQuery.toLowerCase())) return -1;
       if (b.school.toLowerCase().includes(searchQuery.toLowerCase())) return 1;
@@ -150,7 +183,7 @@ export default function Home() {
                 <Text style={styles.notificationDate}>{invite.date}</Text>
                 <Icon style={styles.arrowIconStyles} as={ArrowRightIcon} />
                 <Box style={styles.notificationTitleBox}>
-                  <Text style={styles.notificationTitle}>🎉 Party Invite</Text>
+                  <Text style={styles.notificationTitle}>🎉 {invite.orgAcronym} • {invite.schoolAcronym}</Text>
                 </Box>
                 <Box
                   style={{
