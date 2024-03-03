@@ -37,7 +37,6 @@ const TabsPage = () => {
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="eye-outline" size={size} color={color} />
             ),
-            tabBarLabel: "Live",
           }}
           redirect={!isSignedIn}
         />
@@ -47,7 +46,6 @@ const TabsPage = () => {
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="scan" size={size} color={color} />
             ),
-            tabBarLabel: "Scan",
           }}
           redirect={!isSignedIn}
         /> */}
@@ -55,9 +53,8 @@ const TabsPage = () => {
           name="home"
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="home" size={size} color={color} />
+              <Ionicons name="happy" size={size} color={color} />
             ),
-            tabBarLabel: "Home",
           }}
           redirect={!isSignedIn}
         />
@@ -67,7 +64,6 @@ const TabsPage = () => {
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="person-outline" size={size} color={color} />
             ),
-            tabBarLabel: "Profile",
           }}
           redirect={!isSignedIn}
         />

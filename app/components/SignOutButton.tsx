@@ -10,6 +10,7 @@ const SignOutButton = () => {
       bg="#FF025B"
       size="xl"
       rounded={"$full"}
+      marginTop={8}
       onPress={() => signOut()}
     >
       <Text color="#fff" fontWeight="$semibold">
