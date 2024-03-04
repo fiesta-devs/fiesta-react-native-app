@@ -173,8 +173,11 @@ export default function Home() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#eeeeee" }}>
         <Box style={styles.pageTitleBox}>
-          <Text style={styles.pageTitle}>Fiesta • Johns Hopkins University</Text>
+          <Text style={styles.pageTitle}>
+            Fiesta • Johns Hopkins University
+          </Text>
         </Box>
+        <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <ScrollView style={styles.scrollView}>
           {invites.map((invite, index) => {
             return (
@@ -225,8 +228,11 @@ export default function Home() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#eeeeee" }}>
         <Box style={styles.pageTitleBox}>
-          <Text style={styles.pageTitle}>Events</Text>
+          <Text style={styles.pageTitle}>
+            Fiesta • Johns Hopkins University
+          </Text>
         </Box>
+        {/*<Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />*/}
         <Box style={styles.centeredBox}>
           <Text>{"No invites :("}</Text>
         </Box>
@@ -235,24 +241,20 @@ export default function Home() {
   }
 }
 
-const search = (searchQuery, setSearchQuery) => {
+function Search({ searchQuery, setSearchQuery }) {
   return (
     <Box style={styles.queryBoxStyles}>
-    <Input
-      variant="rounded"
-      size="md"
-      style={styles.searchInputBoxStyles}
-    >
-      <Icon style={styles.searchIconStyles} as={SearchIcon} />
-      <InputField
-        style={styles.inputTextStyle}
-        placeholder="Search by event, organization, school or description"
-        value={searchQuery}
-        onChangeText={(text) => setSearchQuery(text)}
-      />
-    </Input>
-  </Box>
-  )
+      <Input variant="rounded" size="md" style={styles.searchInputBoxStyles}>
+        <Icon style={styles.searchIconStyles} as={SearchIcon} />
+        <InputField
+          style={styles.inputTextStyle}
+          placeholder="Search by event, organization, school or description"
+          value={searchQuery}
+          onChangeText={(text) => setSearchQuery(text)}
+        />
+      </Input>
+    </Box>
+  );
 }
 
 const styles = StyleSheet.create({
