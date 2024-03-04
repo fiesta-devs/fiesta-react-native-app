@@ -56,7 +56,7 @@ const sampleInvites = [
     orgAcronym: "Sig Chi",
     school: "University of Michigan",
     schoolAcronym: "UMich",
-    live: false,
+    live: true,
   },
   {
     name: "Swim Meet",
@@ -177,15 +177,22 @@ export default function Home() {
             Fiesta • Johns Hopkins University
           </Text>
         </Box>
-        <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        {/*<Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />*/}
         <ScrollView style={styles.scrollView}>
           {invites.map((invite, index) => {
             return (
-              <Box key={index} style={styles.notificationCard}>
-                <Text style={styles.notificationDate}>{invite.date}</Text>
+              <Box
+                key={index}
+                style={invite.live ? styles.liveEventCard : styles.eventCard}
+              >
+                <Text style={styles.eventDate}>{invite.date}</Text>
                 <Icon style={styles.arrowIconStyles} as={ArrowRightIcon} />
-                <Box style={styles.notificationTitleBox}>
-                  <Text style={styles.notificationTitle}>
+                <Box style={styles.eventTitleBox}>
+                  <Text
+                    style={
+                      invite.live ? styles.liveEventTitle : styles.eventTitle
+                    }
+                  >
                     🎉 {invite.orgAcronym} • {invite.schoolAcronym}
                   </Text>
                 </Box>
@@ -196,12 +203,10 @@ export default function Home() {
                     marginVertical: 5,
                   }}
                 />
-                <Box style={styles.notificationDescriptionBox}>
-                  <Text style={styles.notificationEventTitle}>
-                    {invite.name}
-                  </Text>
+                <Box style={styles.eventDescriptionBox}>
+                  <Text style={styles.eventEventTitle}>{invite.name}</Text>
                   <Text
-                    style={styles.notificationDescription}
+                    style={styles.eventDescription}
                     numberOfLines={2}
                     ellipsizeMode="tail"
                   >
@@ -271,7 +276,24 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#000",
   },
-  notificationCard: {
+  queryBoxStyles: {
+    flexDirection: "row",
+    marginHorizontal: 16,
+  },
+  searchInputBoxStyles: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 16,
+  },
+  searchIconStyles: {
+    marginLeft: 16,
+  },
+  inputTextStyle: {
+    fontSize: 14,
+    marginLeft: -8,
+  },
+  eventCard: {
     padding: 16,
     margin: 16,
     marginTop: 0,
@@ -280,31 +302,47 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
   },
-  notificationTitleBox: {
+  liveEventCard: {
+    padding: 16,
+    margin: 16,
+    marginTop: 0,
+    backgroundColor: "#ffffff",
+    elevation: 10,
+    borderRadius: 20,
+    justifyContent: "center",
+    borderColor: "#FF025Bcc",
+    borderWidth: 2,
+  },
+  eventTitleBox: {
     padding: 8,
   },
-  notificationTitle: {
+  eventTitle: {
     fontSize: 20,
     fontWeight: "600",
     color: "#FF025Bcc",
   },
-  notificationDate: {
+  liveEventTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#FF025Bcc",
+  },
+  eventDate: {
     fontSize: 14,
     color: "#999999",
     position: "absolute",
     right: 24,
     top: 24,
   },
-  notificationDescriptionBox: {
+  eventDescriptionBox: {
     padding: 8,
   },
-  notificationEventTitle: {
+  eventEventTitle: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#000",
     paddingVertical: 8,
   },
-  notificationDescription: {
+  eventDescription: {
     fontSize: 16,
     color: "#999999",
     overflow: "hidden",
@@ -323,23 +361,6 @@ const styles = StyleSheet.create({
     bottom: 24,
     right: 24,
     position: "absolute",
-  },
-  queryBoxStyles: {
-    flexDirection: "row",
-    margin: 16,
-    marginBottom: 0,
-  },
-  searchInputBoxStyles: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-  },
-  searchIconStyles: {
-    marginLeft: 16,
-  },
-  inputTextStyle: {
-    fontSize: 14,
-    marginLeft: -8,
   },
   centeredBox: {
     flex: 1,

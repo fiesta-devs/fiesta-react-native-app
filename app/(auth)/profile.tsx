@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, SafeAreaView, Box } from "@gluestack-ui/themed";
 import SignOutButton from "../components/SignOutButton";
+//import EditProfileButton from "../components/EditProfileButton";
 import { Avatar, AvatarFallbackText, AvatarImage } from "@gluestack-ui/themed";
 import { useTabsContext } from "../context/TabsContext";
 import { StyleSheet } from "react-native";
@@ -44,7 +45,7 @@ const Profile = () => {
           bgColor=/*{`${user.color}`}*/ "$amber800"
           size="2xl"
           borderRadius="$full"
-          style={{ marginBottom: 10 }}
+          style={{ marginBottom: 5 }}
         >
           <AvatarFallbackText>{fullName}</AvatarFallbackText>
           <AvatarImage
@@ -79,7 +80,7 @@ const Profile = () => {
             <Text style={styles.subtext}>0</Text>
           </Box>
         </Box>
-        {/* edit profile*/}
+        {/* edit profile <EditProfileButton /> */}
         {/* show avatar past scroll avatar*/}
         <SignOutButton />
       </Box>
