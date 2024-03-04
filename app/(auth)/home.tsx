@@ -5,13 +5,11 @@ import {
   Box,
   Icon,
   Text,
-  Input,
-  InputField,
-  SearchIcon,
   SafeAreaView,
   ScrollView,
 } from "@gluestack-ui/themed";
 import { useTabsContext } from "../context/TabsContext";
+import LiveEventCard from "../components/LiveEventCard";
 
 const sampleInvites = [
   {
@@ -126,6 +124,8 @@ const sampleInvites = [
   },
 ];
 
+//split home into two views upcoming events and past events and make both searchable respectfully
+//and then put the live events on top of the scrollable view
 export default function Home() {
   //const { invites } = useTabsContext();
   const [searchQuery, setSearchQuery] = useState("");
@@ -169,7 +169,59 @@ export default function Home() {
       return 0;
     });
 
-  if (invites?.length > 0) {
+  const liveEvents = invites.filter((invite) => invite.live);
+  const nonLiveEvents = invites.filter((invite) => !invite.live);
+
+  const renderLiveEvents = (invites) => {
+    return invites.map((invite, index) => (
+      <LiveEventCard invite={invite} index={index}/>
+    ));
+  };
+
+  const renderUpcomingEvents = (invites) => {
+    return invites.map((invite, index) => (
+      <Box key={index} style={styles.eventCard}>
+        <Text style={styles.eventDate}>{invite.date}</Text>
+        <Icon style={styles.arrowIconStyles} as={ArrowRightIcon} />
+        <Box style={styles.eventTitleBox}>
+          <Text style={styles.eventTitle}>
+            🎉 {invite.orgAcronym} • {invite.schoolAcronym}
+          </Text>
+        </Box>
+        <Box
+          style={{
+            height: 1,
+            backgroundColor: "#eeeeee",
+            marginVertical: 5,
+          }}
+        />
+        <Box style={styles.eventDescriptionBox}>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.eventName}>
+            {invite.name}
+          </Text>
+          <Text
+            style={styles.eventDescription}
+            numberOfLines={2}
+            ellipsizeMode="tail"
+          >
+            {invite.description}
+          </Text>
+        </Box>
+        <Box
+          style={{
+            height: 1,
+            backgroundColor: "#eeeeee",
+            marginTop: 5,
+          }}
+        />
+        <Box style={styles.footerBox}>
+          <Text style={styles.footer}>View More</Text>
+        </Box>
+      </Box>
+    ));
+  };
+
+  if (invites.length > 0) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#eeeeee" }}>
         <Box style={styles.pageTitleBox}>
@@ -177,55 +229,9 @@ export default function Home() {
             Fiesta • Johns Hopkins University
           </Text>
         </Box>
-        {/*<Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />*/}
         <ScrollView style={styles.scrollView}>
-          {invites.map((invite, index) => {
-            return (
-              <Box
-                key={index}
-                style={invite.live ? styles.liveEventCard : styles.eventCard}
-              >
-                <Text style={styles.eventDate}>{invite.date}</Text>
-                <Icon style={styles.arrowIconStyles} as={ArrowRightIcon} />
-                <Box style={styles.eventTitleBox}>
-                  <Text
-                    style={
-                      invite.live ? styles.liveEventTitle : styles.eventTitle
-                    }
-                  >
-                    🎉 {invite.orgAcronym} • {invite.schoolAcronym}
-                  </Text>
-                </Box>
-                <Box
-                  style={{
-                    height: 1,
-                    backgroundColor: "#eeeeee",
-                    marginVertical: 5,
-                  }}
-                />
-                <Box style={styles.eventDescriptionBox}>
-                  <Text style={styles.eventEventTitle}>{invite.name}</Text>
-                  <Text
-                    style={styles.eventDescription}
-                    numberOfLines={2}
-                    ellipsizeMode="tail"
-                  >
-                    {invite.description}
-                  </Text>
-                </Box>
-                <Box
-                  style={{
-                    height: 1,
-                    backgroundColor: "#eeeeee",
-                    marginTop: 5,
-                  }}
-                />
-                <Box style={styles.footerBox}>
-                  <Text style={styles.footer}>View More</Text>
-                </Box>
-              </Box>
-            );
-          })}
+          {renderLiveEvents(liveEvents)}
+          {renderUpcomingEvents(nonLiveEvents)}
         </ScrollView>
       </SafeAreaView>
     );
@@ -237,29 +243,12 @@ export default function Home() {
             Fiesta • Johns Hopkins University
           </Text>
         </Box>
-        {/*<Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />*/}
         <Box style={styles.centeredBox}>
           <Text>{"No invites :("}</Text>
         </Box>
       </SafeAreaView>
     );
   }
-}
-
-function Search({ searchQuery, setSearchQuery }) {
-  return (
-    <Box style={styles.queryBoxStyles}>
-      <Input variant="rounded" size="md" style={styles.searchInputBoxStyles}>
-        <Icon style={styles.searchIconStyles} as={SearchIcon} />
-        <InputField
-          style={styles.inputTextStyle}
-          placeholder="Search by event, organization, school or description"
-          value={searchQuery}
-          onChangeText={(text) => setSearchQuery(text)}
-        />
-      </Input>
-    </Box>
-  );
 }
 
 const styles = StyleSheet.create({
@@ -276,42 +265,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#000",
   },
-  queryBoxStyles: {
-    flexDirection: "row",
-    marginHorizontal: 16,
-  },
-  searchInputBoxStyles: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    marginBottom: 16,
-  },
-  searchIconStyles: {
-    marginLeft: 16,
-  },
-  inputTextStyle: {
-    fontSize: 14,
-    marginLeft: -8,
-  },
   eventCard: {
     padding: 16,
     margin: 16,
+    marginHorizontal: 24,
     marginTop: 0,
     backgroundColor: "#ffffff",
     elevation: 10,
     borderRadius: 20,
     justifyContent: "center",
-  },
-  liveEventCard: {
-    padding: 16,
-    margin: 16,
-    marginTop: 0,
-    backgroundColor: "#ffffff",
-    elevation: 10,
-    borderRadius: 20,
-    justifyContent: "center",
-    borderColor: "#FF025Bcc",
-    borderWidth: 2,
   },
   eventTitleBox: {
     padding: 8,
@@ -321,10 +283,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#FF025Bcc",
   },
-  liveEventTitle: {
+  eventName: {
     fontSize: 20,
     fontWeight: "600",
-    color: "#FF025Bcc",
+    color: "#000",
   },
   eventDate: {
     fontSize: 14,
