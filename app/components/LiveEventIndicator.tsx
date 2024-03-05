@@ -3,7 +3,8 @@ import { Animated, StyleSheet, View } from "react-native";
 
 const LiveEventIndicator = () => {
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
-  const opacityAnim = useRef(new Animated.Value(1)).current; // New opacity animation value
+  const opacityAnimOuter = useRef(new Animated.Value(1)).current;
+  const opacityAnimInner = useRef(new Animated.Value(0.5)).current;
 
   useEffect(() => {
     Animated.loop(
@@ -14,16 +15,26 @@ const LiveEventIndicator = () => {
             duration: 400,
             useNativeDriver: true,
           }),
-          Animated.timing(opacityAnim, {
+          Animated.timing(opacityAnimOuter, {
             toValue: 0,
             duration: 400,
             useNativeDriver: true,
           }),
+          Animated.timing(opacityAnimInner, {
+            toValue: 1,
+            duration: 400,
+            useNativeDriver: true,
+          }),
         ]),
-        Animated.delay(1200),
+        Animated.delay(1000),
+        Animated.timing(opacityAnimInner, {
+          toValue: .5,
+          duration: 400,
+          useNativeDriver: true,
+        }),
       ])
     ).start();
-  }, [scaleAnim, opacityAnim]);
+  }, [scaleAnim, opacityAnimOuter, opacityAnimInner]);
 
   return (
     <View style={styles.container}>
@@ -32,11 +43,11 @@ const LiveEventIndicator = () => {
           styles.indicator,
           {
             transform: [{ scale: scaleAnim }],
-            opacity: opacityAnim,
+            opacity: opacityAnimOuter,
           },
         ]}
       />
-      <View style={styles.circle} />
+      <Animated.View style={[styles.circle, { opacity: opacityAnimInner }]} />
     </View>
   );
 };
