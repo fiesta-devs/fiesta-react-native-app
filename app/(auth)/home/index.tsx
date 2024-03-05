@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import {
   ArrowRightIcon,
   Box,
@@ -8,11 +8,13 @@ import {
   SafeAreaView,
   ScrollView,
 } from "@gluestack-ui/themed";
-import { useTabsContext } from "../context/TabsContext";
-import LiveEventCard from "../components/LiveEventCard";
+import { useTabsContext } from "../../context/TabsContext";
+import LiveEventCard from "../../components/LiveEventCard";
+import { router } from "expo-router";
 
 const sampleInvites = [
   {
+    id: 1,
     name: "Club Soccer Match",
     description:
       "Join us for an exciting soccer match between our club's teams. Open to all members!",
@@ -24,6 +26,7 @@ const sampleInvites = [
     live: false,
   },
   {
+    id: 2,
     name: "Tennis Tournament",
     description:
       "Compete in our annual tennis tournament and show off your skills on the court.",
@@ -35,6 +38,7 @@ const sampleInvites = [
     live: false,
   },
   {
+    id: 3,
     name: "Yoga in the Park",
     description:
       "Relax and unwind with a morning yoga session in the park. Suitable for all levels.",
@@ -46,6 +50,7 @@ const sampleInvites = [
     live: false,
   },
   {
+    id: 4,
     name: "Club BBQ",
     description:
       "Enjoy delicious food and great company at our club's annual BBQ event.",
@@ -57,6 +62,7 @@ const sampleInvites = [
     live: true,
   },
   {
+    id: 5,
     name: "Swim Meet",
     description:
       "Cheer on our swimmers as they compete in various swimming events.",
@@ -68,6 +74,7 @@ const sampleInvites = [
     live: false,
   },
   {
+    id: 6,
     name: "Golf Outing",
     description:
       "Tee off with fellow club members at our golf outing event. All skill levels welcome.",
@@ -79,6 +86,7 @@ const sampleInvites = [
     live: false,
   },
   {
+    id: 7,
     name: "Charity Run",
     description:
       "Participate in a charity run to support a good cause. Choose from different distances.",
@@ -90,6 +98,7 @@ const sampleInvites = [
     live: false,
   },
   {
+    id: 8,
     name: "Club Picnic",
     description:
       "Join us for a fun-filled day of games, food, and relaxation at our club picnic.",
@@ -101,6 +110,7 @@ const sampleInvites = [
     live: false,
   },
   {
+    id: 9,
     name: "Dance Party",
     description:
       "Dance the night away at our club's dance party event. Music, lights, and fun guaranteed!",
@@ -112,6 +122,7 @@ const sampleInvites = [
     live: false,
   },
   {
+    id: 10,
     name: "Hiking Adventure",
     description:
       "Embark on a scenic hiking adventure with fellow club members. Explore nature and enjoy breathtaking views. We can't wait to see you here please come ready to party!",
@@ -172,12 +183,6 @@ export default function Home() {
   const liveEvents = invites.filter((invite) => invite.live);
   const nonLiveEvents = invites.filter((invite) => !invite.live);
 
-  const renderLiveEvents = (invites) => {
-    return invites.map((invite, index) => (
-      <LiveEventCard invite={invite} key={index} />
-    ));
-  };
-
   const liveEventAnnouncements = (num: number) => {
     switch (num) {
       case 0:
@@ -193,46 +198,74 @@ export default function Home() {
     return `${num} upcoming events`;
   };
 
+  const renderLiveEvents = (invites) => {
+    return invites.map((invite, index: number) => (
+      <TouchableOpacity
+        key={index}
+        onPress={() =>
+          router.push(
+            `/home/${invite.id}?invite=${encodeURIComponent(
+              JSON.stringify(invite)
+            )}`
+          )
+        }
+      >
+        <LiveEventCard invite={invite} />
+      </TouchableOpacity>
+    ));
+  };
+
   const renderUpcomingEvents = (invites) => {
-    return invites.map((invite, index) => (
-      <Box key={index} style={styles.eventCard}>
-        <Text style={styles.eventDate}>{invite.date}</Text>
-        <Icon style={styles.arrowIconStyles} as={ArrowRightIcon} />
-        <Box style={styles.eventTitleBox}>
-          <Text style={styles.eventTitle}>
-            🎉 {invite.orgAcronym} • {invite.schoolAcronym}
-          </Text>
+    return invites.map((invite, index: number) => (
+      <TouchableOpacity
+        key={index}
+        onPress={() =>
+          router.push(`/home/${invite.id}?invite=${JSON.stringify(invite)}`)
+        }
+      >
+        <Box style={styles.eventCard}>
+          <Text style={styles.eventDate}>{invite.date}</Text>
+          <Icon style={styles.arrowIconStyles} as={ArrowRightIcon} />
+          <Box style={styles.eventTitleBox}>
+            <Text style={styles.eventTitle}>
+              🎉 {invite.orgAcronym} • {invite.schoolAcronym}
+            </Text>
+          </Box>
+          <Box
+            style={{
+              height: 1,
+              backgroundColor: "#eeeeee",
+              marginVertical: 5,
+            }}
+          />
+          <Box style={styles.eventDescriptionBox}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={styles.eventName}
+            >
+              {invite.name}
+            </Text>
+            <Text
+              style={styles.eventDescription}
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {invite.description}
+            </Text>
+          </Box>
+          <Box
+            style={{
+              height: 1,
+              backgroundColor: "#eeeeee",
+              marginTop: 5,
+            }}
+          />
+          <Box style={styles.footerBox}>
+            <Text style={styles.footer}>View More</Text>
+          </Box>
         </Box>
-        <Box
-          style={{
-            height: 1,
-            backgroundColor: "#eeeeee",
-            marginVertical: 5,
-          }}
-        />
-        <Box style={styles.eventDescriptionBox}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.eventName}>
-            {invite.name}
-          </Text>
-          <Text
-            style={styles.eventDescription}
-            numberOfLines={2}
-            ellipsizeMode="tail"
-          >
-            {invite.description}
-          </Text>
-        </Box>
-        <Box
-          style={{
-            height: 1,
-            backgroundColor: "#eeeeee",
-            marginTop: 5,
-          }}
-        />
-        <Box style={styles.footerBox}>
-          <Text style={styles.footer}>View More</Text>
-        </Box>
-      </Box>
+      </TouchableOpacity>
     ));
   };
 
@@ -240,9 +273,7 @@ export default function Home() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#eeeeee" }}>
         <Box style={styles.pageTitleBox}>
-          <Text style={styles.pageTitle}>
-            Fiesta • Johns Hopkins University
-          </Text>
+          <Text style={styles.pageTitle}>Johns Hopkins University</Text>
         </Box>
         <Box>
           <Text style={styles.liveEventAnnouncementsText}>
@@ -267,9 +298,7 @@ export default function Home() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#eeeeee" }}>
         <Box style={styles.pageTitleBox}>
-          <Text style={styles.pageTitle}>
-            Fiesta • Johns Hopkins University
-          </Text>
+          <Text style={styles.pageTitle}>Johns Hopkins University</Text>
         </Box>
         <Box style={styles.centeredBox}>
           <Text>{"No invites :("}</Text>
@@ -370,7 +399,7 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     fontSize: 36,
     color: "#000000",
-    fontWeight: 800,
+    fontWeight: "800",
     lineHeight: 48,
   },
 });
