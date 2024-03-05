@@ -174,8 +174,19 @@ export default function Home() {
 
   const renderLiveEvents = (invites) => {
     return invites.map((invite, index) => (
-      <LiveEventCard invite={invite} key={index}/>
+      <LiveEventCard invite={invite} key={index} />
     ));
+  };
+
+  const liveEventAnnouncements = (num: number) => {
+    switch (num) {
+      case 0:
+        return "You have no live events.";
+      case 1:
+        return "You have a live event!";
+      default:
+        return `You have ${num} live events!`;
+    }
   };
 
   const renderUpcomingEvents = (invites) => {
@@ -229,8 +240,14 @@ export default function Home() {
             Fiesta • Johns Hopkins University
           </Text>
         </Box>
+        <Box>
+          <Text style={styles.liveEventAnnouncementsText}>
+            {" "}
+            {liveEventAnnouncements(liveEvents.length)}{" "}
+          </Text>
+          <Box style={styles.liveView}>{renderLiveEvents(liveEvents)}</Box>
+        </Box>
         <ScrollView style={styles.scrollView}>
-          {renderLiveEvents(liveEvents)}
           {renderUpcomingEvents(nonLiveEvents)}
         </ScrollView>
       </SafeAreaView>
@@ -253,6 +270,9 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   scrollView: {
+    backgroundColor: "#eeeeee",
+  },
+  liveView: {
     backgroundColor: "#eeeeee",
   },
   pageTitleBox: {
@@ -328,5 +348,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  liveEventAnnouncementsText: {
+    marginLeft: 24,
   },
 });
