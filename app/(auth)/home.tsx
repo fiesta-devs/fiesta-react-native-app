@@ -174,7 +174,7 @@ export default function Home() {
 
   const renderLiveEvents = (invites) => {
     return invites.map((invite, index) => (
-      <LiveEventCard invite={invite} index={index}/>
+      <LiveEventCard invite={invite} key={index}/>
     ));
   };
 

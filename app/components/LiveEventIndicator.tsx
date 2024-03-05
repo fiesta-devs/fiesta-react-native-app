@@ -15,11 +15,12 @@ const LiveEventIndicator = () => {
             useNativeDriver: true,
           }),
           Animated.timing(opacityAnim, {
-            toValue: 0, // Animate to fully transparent
+            toValue: 0,
             duration: 400,
             useNativeDriver: true,
           }),
         ]),
+        Animated.delay(1200),
       ])
     ).start();
   }, [scaleAnim, opacityAnim]);
@@ -31,7 +32,7 @@ const LiveEventIndicator = () => {
           styles.indicator,
           {
             transform: [{ scale: scaleAnim }],
-            opacity: opacityAnim, // Apply the animated opacity value
+            opacity: opacityAnim,
           },
         ]}
       />

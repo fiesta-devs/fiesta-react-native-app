@@ -1,36 +1,32 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import {
-  Box,
-  Text,
-} from "@gluestack-ui/themed";
+import { Box, Text } from "@gluestack-ui/themed";
 import LiveEventIndicator from "../components/LiveEventIndicator";
 
-export default function LiveEventCard({invite, index}) {
-  
-    return  (
-      <Box key={index} style={styles.liveEventCard}>
-        <Box style={styles.liveEventDescriptionBox}>
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={styles.liveEventName}
-          >
-            {invite.name}
-          </Text>
-        </Box>
-        <Box style={styles.liveEventIndicatorBox}>
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={styles.liveEventName}
-          >
-            Live
-          </Text>
-          <LiveEventIndicator />
-        </Box>
+export default function LiveEventCard({ invite }) {
+  return (
+    <Box style={styles.liveEventCard}>
+      <Box style={styles.liveEventNameBox}>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={styles.liveEventName}
+        >
+          {invite.name}
+        </Text>
       </Box>
-    );
+      <Box style={styles.liveEventIndicatorBox}>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={styles.liveEventLive}
+        >
+          Live
+        </Text>
+        <LiveEventIndicator />
+      </Box>
+    </Box>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -44,11 +40,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
   },
-  liveEventTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#000",
-  },
   liveEventName: {
     fontSize: 20,
     fontWeight: "600",
@@ -57,8 +48,17 @@ const styles = StyleSheet.create({
   liveEventIndicatorBox: {
     position: "absolute",
     right: 24,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  liveEventDescriptionBox: {
+  liveEventLive: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#FFF",
+    marginRight: 12,
+  },
+  liveEventNameBox: {
     padding: 8,
   },
 });
