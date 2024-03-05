@@ -189,6 +189,10 @@ export default function Home() {
     }
   };
 
+  const upcomingEventAnnouncements = (num: number) => {
+    return `${num} upcoming events`;
+  };
+
   const renderUpcomingEvents = (invites) => {
     return invites.map((invite, index) => (
       <Box key={index} style={styles.eventCard}>
@@ -248,6 +252,13 @@ export default function Home() {
           <Box style={styles.liveView}>{renderLiveEvents(liveEvents)}</Box>
         </Box>
         <ScrollView style={styles.scrollView}>
+          <Text style={styles.upcomingEventAnnouncementsText}>
+            {" "}
+            {upcomingEventAnnouncements(nonLiveEvents.length)}{" "}
+          </Text>
+          <Text style={styles.liveEventAnnouncementsText}>
+            Tap an invite to see details
+          </Text>
           {renderUpcomingEvents(nonLiveEvents)}
         </ScrollView>
       </SafeAreaView>
@@ -270,6 +281,7 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   scrollView: {
+    paddingTop: 10,
     backgroundColor: "#eeeeee",
   },
   liveView: {
@@ -282,7 +294,7 @@ const styles = StyleSheet.create({
   },
   pageTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "800",
     color: "#000",
   },
   eventCard: {
@@ -350,6 +362,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   liveEventAnnouncementsText: {
+    marginLeft: 32,
+    marginBottom: 2,
+    marginTop: -4,
+  },
+  upcomingEventAnnouncementsText: {
     marginLeft: 24,
+    fontSize: 36,
+    color: "#000000",
+    fontWeight: 800,
+    lineHeight: 48,
   },
 });
