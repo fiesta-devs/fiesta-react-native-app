@@ -4,13 +4,13 @@ import { Box, SafeAreaView, Text } from "@gluestack-ui/themed";
 import { useAuth } from "@clerk/clerk-expo";
 import { getLiveScans } from "../../hooks/endpoints";
 import { useTabsContext } from "../context/TabsContext";
-import LiveFeed from "../components/LiveFeed";
+import LiveFeed from "./LiveFeed";
 
 interface Auth {
   getToken: () => Promise<string>;
 }
 
-export default function Live() {
+export default function LivePage() {
   const [liveScans, setLiveScans] = useState<any[] | null>(null);
   const [eventName, setEventName] = useState<string>("");
   const [eventId, setEventId] = useState<string>("");

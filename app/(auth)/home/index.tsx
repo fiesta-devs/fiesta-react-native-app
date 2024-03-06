@@ -11,6 +11,7 @@ import {
 import { useTabsContext } from "../../context/TabsContext";
 import LiveEventCard from "../../components/LiveEventCard";
 import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 const sampleInvites = [
   {
@@ -272,10 +273,7 @@ export default function Home() {
   if (invites.length > 0) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#eeeeee" }}>
-        <Box style={styles.pageTitleBox}>
-          <Text style={styles.pageTitle}>Johns Hopkins University</Text>
-        </Box>
-        <Box>
+        <Box sx={{mt:20}}>
           <Text style={styles.liveEventAnnouncementsText}>
             {" "}
             {liveEventAnnouncements(liveEvents.length)}{" "}
@@ -297,11 +295,9 @@ export default function Home() {
   } else {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#eeeeee" }}>
-        <Box style={styles.pageTitleBox}>
-          <Text style={styles.pageTitle}>Johns Hopkins University</Text>
-        </Box>
         <Box style={styles.centeredBox}>
-          <Text>{"No invites :("}</Text>
+          <Text sx={{fontSize:'$2xl'}}>{"It's a little quiet in here :("}</Text>
+          <Text sx={{color:'#bbbbbb', fontSize:'$sm'}}>{"Invites will come, Don't worry!"}</Text>
         </Box>
       </SafeAreaView>
     );
@@ -315,16 +311,6 @@ const styles = StyleSheet.create({
   },
   liveView: {
     backgroundColor: "#eeeeee",
-  },
-  pageTitleBox: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 16,
-  },
-  pageTitle: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: "#000",
   },
   eventCard: {
     padding: 16,

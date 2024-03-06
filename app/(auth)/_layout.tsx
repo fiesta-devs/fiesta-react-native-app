@@ -31,11 +31,11 @@ const TabsPage = () => {
           tabBarActiveTintColor: "#FF025B",
         }}
       >
-        {/* <Tabs.Screen
-          name="live"
+        <Tabs.Screen
+          name="home"
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="eye-outline" size={size} color={color} />
+              <Ionicons name="home" size={size} color={color} />
             ),
           }}
           redirect={!isSignedIn}
@@ -45,15 +45,6 @@ const TabsPage = () => {
           options={{
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="scan" size={size} color={color} />
-            ),
-          }}
-          redirect={!isSignedIn}
-        /> */}
-        <Tabs.Screen
-          name="home"
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="home" size={size} color={color} />
             ),
           }}
           redirect={!isSignedIn}

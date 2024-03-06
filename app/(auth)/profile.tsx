@@ -5,6 +5,7 @@ import SignOutButton from "../components/SignOutButton";
 import { Avatar, AvatarFallbackText, AvatarImage } from "@gluestack-ui/themed";
 import { useTabsContext } from "../context/TabsContext";
 import { StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const Profile = () => {
   const { userProfile, setUserProfile, invites } = useTabsContext();
@@ -40,7 +41,15 @@ const Profile = () => {
 
   return (
     <SafeAreaView h={"$full"} backgroundColor="white">
-      <Box flex={1} gap={"$1"} px={"$5"} pt={"$20"}>
+      <Box style={styles.pageTitleBox}>
+          <Box style={styles.pageTitleTextBox}>
+            <Text style={styles.pageTitleText}>
+              <Ionicons color="white" name="pin" size={20} /> Johns Hopkins
+              University
+            </Text>
+          </Box>
+        </Box>
+      <Box flex={1} gap={"$1"} px={"$5"} pt={"$10"}>
         <Avatar
           bgColor=/*{`${user.color}`}*/ "$amber800"
           size="2xl"
@@ -58,14 +67,9 @@ const Profile = () => {
         <Text size="2xl" fontWeight="$semibold" color="$black">
           {userProfile?.firstName} {userProfile?.lastName}
         </Text>
-        <Box flexDirection="row">
           <Text size="md" fontWeight="$semibold" color="#999999">
-            JHU '24
+            {`Member since ${joined}`}
           </Text>
-          <Text size="md" fontWeight="$semibold" color="#999999">
-            {` • Member since ${joined}`}
-          </Text>
-        </Box>
         <Box style={styles.container}>
           <Box style={styles.box}>
             <Text style={styles.text}>Invited</Text>
@@ -116,5 +120,20 @@ const styles = StyleSheet.create({
   },
   subtext: {
     fontSize: 12,
+  },
+  pageTitleBox: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 16,
+  },
+  pageTitleText: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#fff",
+  },
+  pageTitleTextBox: {
+    backgroundColor: "#418FDE",
+    padding: 8,
+    borderRadius: 50,
   },
 });
