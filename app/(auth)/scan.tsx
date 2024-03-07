@@ -1,14 +1,37 @@
 import React from "react";
-import { Text, SafeAreaView } from "@gluestack-ui/themed";
-import {  StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
+import FiestaID from "../components/FiestaID";
+import { useTabsContext } from "../context/TabsContext";
+import { SafeAreaView, Box, Text, Spinner } from "@gluestack-ui/themed";
 
-function ScanPage() {
+export default function Scan() {
+  const { userProfile } = useTabsContext();
 
   return (
     <SafeAreaView style={styles.container}>
-      <Ionicons name="qr-code" size={64} color="#FF025B" />
-      <Text style={styles.drawerTriggerText}>yeyeye qr code coming soon</Text>
+      {userProfile ? (
+        <Box>
+          <Box style={styles.appNameTextBox}>
+            <Text style={styles.appNameText}>Fiesta</Text>
+          </Box>
+          <Box style={styles.note}>
+            <Text style={styles.noteText}>
+              <Text style={styles.boldText}>Note:</Text> This is your Fiesta ID.
+              Screenshot now to scan into parties without having to open Fiesta.
+            </Text>
+          </Box>
+          <FiestaID user={userProfile} />
+        </Box>
+      ) : (
+        <Box sx={{ flex: 1 }}>
+          <Box style={styles.appNameTextBox}>
+            <Text style={styles.appNameText}>Fiesta</Text>
+          </Box>
+          <Box style={styles.spinnerBox}>
+            <Spinner color="#FF025B" />
+          </Box>
+        </Box>
+      )}
     </SafeAreaView>
   );
 }
@@ -16,12 +39,37 @@ function ScanPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    margin: 16,
+  },
+  spinnerBox: {
+    flex: 1,
     justifyContent: "center",
   },
-  drawerTriggerText: {
+  appNameText: {
+    fontSize: 48,
+    lineHeight: 50,
     color: "#FF025B",
+    fontFamily: "Snell Roundhand",
+    fontWeight: "900",
+  },
+  appNameTextBox: {
+    margin: 16,
+    alignItems: "center",
+  },
+  note: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 24,
+    borderColor: "#999999",
+  },
+  noteText: {
+    textAlign: "center",
+    fontSize: 14,
+    color: "#999999",
+  },
+  boldText: {
+    color: "#777777",
+    fontWeight: "bold",
   },
 });
-
-export default ScanPage;

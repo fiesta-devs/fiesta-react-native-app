@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Text, SafeAreaView } from "@gluestack-ui/themed";
 import { TouchableOpacity, StyleSheet, Animated } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, Stack, router } from "expo-router";
+import QRCodeDrawer from "../../components/QRCodeDrawer";
 
 function formatDate(date) {
   const d = new Date(date);
@@ -49,24 +50,42 @@ function EventInfo({ orgName, location, date, startTime, endTime }) {
 }
 
 function EventPage() {
-  const { invite } = useLocalSearchParams();
-  console.log("Invite string to parse:", invite);
+  const { invite, user } = useLocalSearchParams();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const resetDrawerState = () => {
+    setIsOpen(false);
+  };
+
   const inviteString = Array.isArray(invite) ? invite[0] : invite;
   const inviteObject = invite
     ? JSON.parse(decodeURIComponent(inviteString))
     : null;
 
+  const userString = Array.isArray(user) ? user[0] : user;
+  const userObject = user ? JSON.parse(decodeURIComponent(userString)) : null;
+  console.log(user);
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        style={styles.drawerTrigger}
-        onPress={router.back}
-        activeOpacity={1}
-      >
-        <Ionicons style={styles.backButton} name="chevron-back" size={40} />
-        <Ionicons name="qr-code" size={64} color="#fff" />
-        <Text style={styles.drawerTriggerText}>Tap here to scan</Text>
-      </TouchableOpacity>
+      {isOpen ? null : (
+        <TouchableOpacity
+          style={styles.drawerTrigger}
+          onPress={() => setIsOpen(true)}
+          activeOpacity={1}
+        >
+          <Box style={styles.backButtonBox}>
+            <TouchableOpacity onPress={router.back} activeOpacity={1}>
+              <Ionicons
+                style={styles.backButton}
+                name="chevron-back"
+                size={40}
+              />
+            </TouchableOpacity>
+          </Box>
+          <Ionicons name="qr-code" size={64} color="#fff" />
+          <Text style={styles.drawerTriggerText}>Tap here to scan</Text>
+        </TouchableOpacity>
+      )}
       <Box style={styles.content}>
         <Text style={styles.eventName}>{inviteObject.name}</Text>
         <EventInfo
@@ -81,6 +100,11 @@ function EventPage() {
           <Text>{inviteObject.description}</Text>
         </Box>
       </Box>
+      <QRCodeDrawer
+        isOpen={isOpen}
+        handleClose={resetDrawerState}
+        user={userObject}
+      />
     </SafeAreaView>
   );
 }
@@ -136,16 +160,20 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 2,
+    lineHeight: 30,
   },
   iconStyle: {
     color: "#FF025B",
   },
   backButton: {
+    color: "white",
+  },
+  backButtonBox: {
     position: "absolute",
     top: 12,
-    left: 12,
+    left: 8,
     zIndex: 999,
-    color: "white",
+    padding: 4,
   },
 });
 

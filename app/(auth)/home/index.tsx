@@ -11,7 +11,6 @@ import {
 import { useTabsContext } from "../../context/TabsContext";
 import LiveEventCard from "../../components/LiveEventCard";
 import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 
 const sampleInvites = [
   {
@@ -139,7 +138,7 @@ const sampleInvites = [
 //split home into two views upcoming events and past events and make both searchable respectfully
 //and then put the live events on top of the scrollable view
 export default function Home() {
-  //const { invites } = useTabsContext();
+  const { userProfile } = useTabsContext();
   const [searchQuery, setSearchQuery] = useState("");
 
   const invites = sampleInvites
@@ -203,11 +202,12 @@ export default function Home() {
     return invites.map((invite, index: number) => (
       <TouchableOpacity
         key={index}
+        activeOpacity={1}
         onPress={() =>
           router.push(
             `/home/${invite.id}?invite=${encodeURIComponent(
               JSON.stringify(invite)
-            )}`
+            )}&user=${encodeURIComponent(JSON.stringify(userProfile))}`
           )
         }
       >
@@ -220,8 +220,13 @@ export default function Home() {
     return invites.map((invite, index: number) => (
       <TouchableOpacity
         key={index}
+        activeOpacity={1}
         onPress={() =>
-          router.push(`/home/${invite.id}?invite=${JSON.stringify(invite)}`)
+          router.push(
+            `/home/${invite.id}?invite=${JSON.stringify(
+              invite
+            )}&user=${encodeURIComponent(JSON.stringify(userProfile))}`
+          )
         }
       >
         <Box style={styles.eventCard}>
@@ -273,14 +278,14 @@ export default function Home() {
   if (invites.length > 0) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#eeeeee" }}>
-        <Box sx={{mt:20}}>
+        <Box sx={{ mt: 30 }}>
           <Text style={styles.liveEventAnnouncementsText}>
             {" "}
             {liveEventAnnouncements(liveEvents.length)}{" "}
           </Text>
           <Box style={styles.liveView}>{renderLiveEvents(liveEvents)}</Box>
         </Box>
-        <ScrollView style={styles.scrollView}>
+        <Box sx={{ my: 10 }}>
           <Text style={styles.upcomingEventAnnouncementsText}>
             {" "}
             {upcomingEventAnnouncements(nonLiveEvents.length)}{" "}
@@ -288,6 +293,8 @@ export default function Home() {
           <Text style={styles.liveEventAnnouncementsText}>
             Tap an invite to see details
           </Text>
+        </Box>
+        <ScrollView style={styles.scrollView}>
           {renderUpcomingEvents(nonLiveEvents)}
         </ScrollView>
       </SafeAreaView>
@@ -296,8 +303,12 @@ export default function Home() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#eeeeee" }}>
         <Box style={styles.centeredBox}>
-          <Text sx={{fontSize:'$2xl'}}>{"It's a little quiet in here :("}</Text>
-          <Text sx={{color:'#bbbbbb', fontSize:'$sm'}}>{"Invites will come, Don't worry!"}</Text>
+          <Text sx={{ fontSize: "$2xl" }}>
+            {"It's a little quiet in here :("}
+          </Text>
+          <Text sx={{ color: "#bbbbbb", fontSize: "$sm" }}>
+            {"Invites will come, Don't worry!"}
+          </Text>
         </Box>
       </SafeAreaView>
     );
