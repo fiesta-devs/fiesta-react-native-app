@@ -9,6 +9,7 @@ function ScannerPage() {
   return (
     <SafeAreaView>
       <Text>scanner page</Text>
+      {/* scanner and live feed perhaps description too */}
     </SafeAreaView>
   );
 }
