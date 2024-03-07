@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import React from "react";
 
-export default function HomeStack() {
+export default function ScanStack() {
   return (
     <Stack
       screenOptions={{

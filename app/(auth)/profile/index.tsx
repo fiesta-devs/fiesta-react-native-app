@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Text, SafeAreaView, Box } from "@gluestack-ui/themed";
-import SignOutButton from "../components/SignOutButton";
+import SignOutButton from "../../components/SignOutButton";
 //import EditProfileButton from "../components/EditProfileButton";
 import { Avatar, AvatarFallbackText, AvatarImage } from "@gluestack-ui/themed";
-import { useTabsContext } from "../context/TabsContext";
+import { useTabsContext } from "../../context/TabsContext";
 import { StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 

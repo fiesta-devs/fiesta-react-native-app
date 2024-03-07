@@ -30,7 +30,7 @@ export default function FiestaID({ user }) {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    backgroundColor: "#fff",
+    backgroundColor: "#eeeeee",
     alignItems: "center",
   },
   qrCodeIconContainer: {
