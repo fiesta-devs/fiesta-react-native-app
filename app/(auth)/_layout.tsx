@@ -44,7 +44,7 @@ const TabsPage = () => {
           name="scan"
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="scan" size={size} color={color} />
+              <Ionicons name="barcode" size={size} color={color} />
             ),
           }}
           redirect={!isSignedIn}

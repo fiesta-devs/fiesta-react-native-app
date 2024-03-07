@@ -82,6 +82,18 @@ function EventPage() {
               />
             </TouchableOpacity>
           </Box>
+          <Box style={styles.scanButtonBox}>
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() =>
+                router.push(
+                  `/home/scanner`
+                )
+              }
+            >
+              <Ionicons style={styles.scanButton} name="scan" size={40} />
+            </TouchableOpacity>
+          </Box>
           <Ionicons name="qr-code" size={64} color="#fff" />
           <Text style={styles.drawerTriggerText}>Tap here to scan</Text>
         </TouchableOpacity>
@@ -99,6 +111,7 @@ function EventPage() {
           <Text style={styles.descriptionTitle}>Description:</Text>
           <Text>{inviteObject.description}</Text>
         </Box>
+        {/* ADD A LIVE FEED COUNTER OR SOMETHING HERE */}
       </Box>
       <QRCodeDrawer
         isOpen={isOpen}
@@ -172,6 +185,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 12,
     left: 8,
+    zIndex: 999,
+    padding: 4,
+  },
+  scanButton: {
+    color: "white",
+  },
+  scanButtonBox: {
+    position: "absolute",
+    top: 12,
+    right: 12,
     zIndex: 999,
     padding: 4,
   },
