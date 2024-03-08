@@ -27,7 +27,7 @@ export default function LiveFeedUser({
     <Box
       style={{
         backgroundColor: accepted ? "#e0ffe0" : "#ffe0e0",
-        borderRadius: 50,
+        borderRadius: 25,
         borderColor: "#73737350",
         padding: 10,
         marginBottom: 5,

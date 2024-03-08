@@ -2,14 +2,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import { ActivityIndicator } from "react-native";
 import { Box, SafeAreaView, Text } from "@gluestack-ui/themed";
 import { useAuth } from "@clerk/clerk-expo";
-import { getLiveScans } from "../../hooks/endpoints";
-import { useTabsContext } from "../context/TabsContext";
-import LiveFeed from "./LiveFeed";
+import { getLiveScans } from "../../../hooks/endpoints";
+import { useTabsContext } from "../../context/TabsContext";
+import LiveFeed from "../LiveFeed";
 
 interface Auth {
   getToken: () => Promise<string>;
 }
 
+//NOT BEING USED
 export default function LivePage() {
   const [liveScans, setLiveScans] = useState<any[] | null>(null);
   const [eventName, setEventName] = useState<string>("");

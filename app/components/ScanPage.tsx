@@ -1,34 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@clerk/clerk-expo";
-import {
-  SafeAreaView,
-  Box,
-  Text,
-  Button,
-  ButtonText,
-} from "@gluestack-ui/themed";
+import { Box, Text, Button, SafeAreaView } from "@gluestack-ui/themed";
 import { BarCodeScanner, BarCodeScannedCallback } from "expo-barcode-scanner";
 import Scanner from "./Scanner";
 import ScanDrawer from "./ScanDrawer";
 import { useTabsContext } from "../context/TabsContext";
-import { Linking } from "react-native";
-import { useRouter } from "expo-router";
+//import { Linking } from "react-native";
 
 const ScanPage = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
   const [scanValue, setScanValue] = useState<string | null>(null);
   const { liveEvents, userProfile } = useTabsContext(); // Destructure userProfile from useTabsContext
-  const { isSignedIn } = useAuth();
-  const router = useRouter();
-
-  // useEffect(() => {
-  //   if (!isSignedIn) {
-  //     router.replace("Login");
-  //   } else if (userProfile && !userProfile.isAdmin) {
-  //     router.replace("UserHome");
-  //   }
-  // }, [isSignedIn, userProfile, router]);
 
   const resetState = () => {
     setScanned(false);
@@ -51,18 +33,17 @@ const ScanPage = () => {
     setScanValue(scanningResult.data);
   };
 
-  const openOrgDashboardInSafari = async () => {
-    await Linking.openURL("https://thefiesta.app/organization/dashboard");
-  };
+  // const openOrgDashboardInSafari = async () => {
+  //   await Linking.openURL("https://thefiesta.app/organization/dashboard");
+  // };
 
   return (
-    <SafeAreaView bg="$white" style={{ flex: 1 }}>
-      {liveEvents.length === 0 ? (
+    <SafeAreaView bg="$white" sx={{ marginBottom: 20 }}>
+      {/* {liveEvents.length === 0 ? (
         <Box flex={1} alignItems="center" justifyContent="center">
           <Text size="3xl" paddingBottom={20} fontWeight="$semibold">
             Ready to party?
           </Text>
-          {/* <Text paddingBottom={20}>Go start a live event!</Text> */}
           <Button
             onPress={openOrgDashboardInSafari}
             bg="#FF025B"
@@ -73,41 +54,32 @@ const ScanPage = () => {
             <ButtonText>View events</ButtonText>
           </Button>
         </Box>
-      ) : (
-        <Box flex={1}>
-          {hasPermission === null && (
-            <Text fontSize="$md">Requesting for camera permission</Text>
-          )}
-          {hasPermission === false && (
-            <Box p={4}>
-              <Text fontSize="$md" my={2}>
-                No access to camera
-              </Text>
-              <Button onPress={askForCamPermission}>Allow Camera</Button>
-            </Box>
-          )}
-          {hasPermission && (
-            <Box flex={1} gap={"$20"}>
-              <Box padding={"$4"}>
-                <Text color="black" size="4xl" fontWeight="$semibold">
-                  Scanning for:
-                </Text>
-                <Text color="black" size="4xl" fontWeight="$semibold">
-                  {liveEvents[0].name}
-                </Text>
-              </Box>
-
-              {!scanned && (
-                <Scanner
-                  hasPermission={hasPermission}
-                  scanned={scanned}
-                  onScan={handleScan}
-                />
-              )}
-            </Box>
-          )}
-        </Box>
-      )}
+      ) : ( */}
+      <Box>
+        {hasPermission === null && (
+          <Text fontSize="$md">Requesting for camera permission</Text>
+        )}
+        {hasPermission === false && (
+          <Box p={4}>
+            <Text fontSize="$md" my={2}>
+              No access to camera
+            </Text>
+            <Button onPress={askForCamPermission}>Allow Camera</Button>
+          </Box>
+        )}
+        {hasPermission && (
+          <Box>
+            {!scanned && (
+              <Scanner
+                hasPermission={hasPermission}
+                scanned={scanned}
+                onScan={handleScan}
+              />
+            )}
+          </Box>
+        )}
+      </Box>
+      {/* )} */}
       <ScanDrawer
         scanned={scanned}
         resetState={resetState}

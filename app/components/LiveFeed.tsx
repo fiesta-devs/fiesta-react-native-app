@@ -1,5 +1,11 @@
 import React, { useCallback, useState } from "react";
-import { Box, RefreshControl, ScrollView, Text } from "@gluestack-ui/themed";
+import {
+  Box,
+  RefreshControl,
+  ScrollView,
+  Text,
+  SafeAreaView,
+} from "@gluestack-ui/themed";
 import LiveFeedUser from "./LiveFeedUser";
 
 interface User {

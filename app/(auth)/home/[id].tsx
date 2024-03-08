@@ -82,18 +82,16 @@ function EventPage() {
               />
             </TouchableOpacity>
           </Box>
-          <Box style={styles.scanButtonBox}>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() =>
-                router.push(
-                  `/home/scanner`
-                )
-              }
-            >
-              <Ionicons style={styles.scanButton} name="scan" size={40} />
-            </TouchableOpacity>
-          </Box>
+          {inviteObject.live && userObject.admin ? (
+            <Box style={styles.scanButtonBox}>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => router.push(`/home/scanner`)}
+              >
+                <Ionicons style={styles.scanButton} name="scan" size={40} />
+              </TouchableOpacity>
+            </Box>
+          ) : null}
           <Ionicons name="qr-code" size={64} color="#fff" />
           <Text style={styles.drawerTriggerText}>Tap here to scan</Text>
         </TouchableOpacity>
