@@ -72,7 +72,7 @@ function ScannerPage() {
 
   return (
     <SafeAreaView bg="$white" style={{ flex: 1 }}>
-      <Box marginVertical={10}>
+      <Box marginVertical={10} style={{flex: 1}}>
         <ScanPage />
         <LiveFeed liveScans={liveScans} fetchScans={fetchScans} />
       </Box>
