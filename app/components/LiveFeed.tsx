@@ -34,27 +34,30 @@ export default function LiveFeed({ liveScans, fetchScans }: LiveFeedProps) {
   }, [fetchScans]);
 
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
-      <Box mt={"$6"} mb={"$6"} px={"$2"}>
-        {liveScans?.length > 0 ? (
-          liveScans?.map((scan: Scan, index) => (
-            <LiveFeedUser
-              key={index}
-              accepted={scan.accepted}
-              firstName={scan.user.firstName}
-              lastName={scan.user.lastName}
-              profilePictureURI={scan.user.profilePicture}
-              createdAt={scan.createdAt}
-            />
-          ))
-        ) : (
-          <Text> {"No one at da party :("}</Text>
-        )}
-      </Box>
-    </ScrollView>
+    <Box style={{flex:1}}>
+      <Text>Live Feed:</Text>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Box mt={"$6"} mb={"$6"} px={"$2"}>
+          {liveScans?.length > 0 ? (
+            liveScans?.map((scan: Scan, index) => (
+              <LiveFeedUser
+                key={index}
+                accepted={scan.accepted}
+                firstName={scan.user.firstName}
+                lastName={scan.user.lastName}
+                profilePictureURI={scan.user.profilePicture}
+                createdAt={scan.createdAt}
+              />
+            ))
+          ) : (
+            <Text> {"No one at da party :("}</Text>
+          )}
+        </Box>
+      </ScrollView>
+    </Box>
   );
 }

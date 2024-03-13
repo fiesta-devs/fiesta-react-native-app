@@ -3,10 +3,12 @@ import { Box, SafeAreaView } from "@gluestack-ui/themed";
 import { ActivityIndicator } from "react-native";
 import ScanPage from "../../components/ScanPage";
 import LiveFeed from "../../components/LiveFeed";
-
+import { TouchableOpacity } from "react-native";
 import { useAuth } from "@clerk/clerk-expo";
 import { getLiveScans } from "../../../hooks/endpoints";
 import { useTabsContext } from "../../context/TabsContext";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 interface Auth {
   getToken: () => Promise<string>;
@@ -62,20 +64,25 @@ function ScannerPage() {
   }, [getToken, eventId]);
 
   //show loader until fetchData is complete
-  if (loading) {
-    return (
-      <Box style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-      </Box>
-    );
-  }
-
   return (
     <SafeAreaView bg="$white" style={{ flex: 1 }}>
-      <Box marginVertical={10} style={{flex: 1}}>
-        <ScanPage />
-        <LiveFeed liveScans={liveScans} fetchScans={fetchScans} />
-      </Box>
+      <TouchableOpacity onPress={router.back} activeOpacity={1}>
+        <Ionicons name="chevron-back" size={40} />
+      </TouchableOpacity>
+      {loading ? (
+        <Box
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color="#FF025B" />
+        </Box>
+      ) : (
+        <Box style={{ flex: 1 }}>
+          <Box marginVertical={10} style={{ flex: 1 }}>
+            <ScanPage />
+          </Box>
+          <LiveFeed liveScans={liveScans} fetchScans={fetchScans} />
+        </Box>
+      )}
     </SafeAreaView>
   );
 }

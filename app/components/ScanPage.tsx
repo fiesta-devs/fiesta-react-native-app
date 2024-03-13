@@ -38,7 +38,7 @@ const ScanPage = () => {
   // };
 
   return (
-    <SafeAreaView bg="$white" sx={{ marginBottom: 20 }}>
+    <SafeAreaView bg="$white" sx={{ marginVertical: 20 }}>
       {/* {liveEvents.length === 0 ? (
         <Box flex={1} alignItems="center" justifyContent="center">
           <Text size="3xl" paddingBottom={20} fontWeight="$semibold">
