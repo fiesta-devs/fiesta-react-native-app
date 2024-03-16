@@ -259,7 +259,7 @@ const Login = () => {
           </Box>
           <Box gap={"$4"}>
             <Text size="xl" color="$white" fontWeight="$semibold">
-              Phone number
+              Already have an account?
             </Text>
             <Input
               w={"$full"}

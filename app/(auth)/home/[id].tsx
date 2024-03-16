@@ -5,12 +5,20 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, router } from "expo-router";
 import QRCodeDrawer from "../../components/QRCodeDrawer";
 
-function formatDate(date) {
+interface EventInfoProps {
+  orgName?: string;
+  location?: string;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+}
+
+function formatDate(date: string): string {
   const d = new Date(date);
   return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear() - 2000}`;
 }
 
-function EventInfo({ orgName, location, date, startTime, endTime }) {
+function EventInfo({ orgName, location, date, startTime, endTime }: EventInfoProps) {
   return (
     <Box>
       {orgName && (
@@ -49,6 +57,16 @@ function EventInfo({ orgName, location, date, startTime, endTime }) {
   );
 }
 
+interface Invite {
+  live?: boolean;
+  admin?: boolean;
+  name?: string;
+  orgAcronym?: string;
+  organization?: string;
+  date?: string;
+  description?: string;
+}
+
 function EventPage() {
   const { invite, user } = useLocalSearchParams();
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -58,13 +76,13 @@ function EventPage() {
   };
 
   const inviteString = Array.isArray(invite) ? invite[0] : invite;
-  const inviteObject = invite
+  const inviteObject: Invite = invite
     ? JSON.parse(decodeURIComponent(inviteString))
-    : null;
+    : {};
 
   const userString = Array.isArray(user) ? user[0] : user;
   const userObject = user ? JSON.parse(decodeURIComponent(userString)) : null;
-  console.log(user);
+
   return (
     <SafeAreaView style={styles.container}>
       {isOpen ? null : (
@@ -82,7 +100,7 @@ function EventPage() {
               />
             </TouchableOpacity>
           </Box>
-          {inviteObject.live && userObject.admin ? (
+          {inviteObject.live && userObject?.admin ? (
             <Box style={styles.scanButtonBox}>
               <TouchableOpacity
                 activeOpacity={1}

@@ -12,7 +12,19 @@ import { useTabsContext } from "../../context/TabsContext";
 import LiveEventCard from "../../components/LiveEventCard";
 import { router } from "expo-router";
 
-const sampleInvites = [
+interface Invite {
+  id: number;
+  name: string;
+  description: string;
+  date: string;
+  organization: string;
+  orgAcronym: string;
+  school: string;
+  schoolAcronym: string;
+  live: boolean;
+}
+
+const sampleInvites: Invite[] = [
   {
     id: 1,
     name: "Club Soccer Match",
@@ -139,7 +151,7 @@ const sampleInvites = [
 //and then put the live events on top of the scrollable view
 export default function Home() {
   const { userProfile } = useTabsContext();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const invites = sampleInvites
     .filter(
@@ -183,7 +195,7 @@ export default function Home() {
   const liveEvents = invites.filter((invite) => invite.live);
   const nonLiveEvents = invites.filter((invite) => !invite.live);
 
-  const liveEventAnnouncements = (num: number) => {
+  const liveEventAnnouncements = (num: number): string => {
     switch (num) {
       case 0:
         return "You have no live events.";
@@ -194,12 +206,12 @@ export default function Home() {
     }
   };
 
-  const upcomingEventAnnouncements = (num: number) => {
+  const upcomingEventAnnouncements = (num: number): string => {
     return `${num} upcoming events`;
   };
 
-  const renderLiveEvents = (invites) => {
-    return invites.map((invite, index: number) => (
+  const renderLiveEvents = (invites: Invite[]): JSX.Element[] => {
+    return invites.map((invite, index) => (
       <TouchableOpacity
         key={index}
         activeOpacity={1}
@@ -216,8 +228,8 @@ export default function Home() {
     ));
   };
 
-  const renderUpcomingEvents = (invites) => {
-    return invites.map((invite, index: number) => (
+  const renderUpcomingEvents = (invites: Invite[]): JSX.Element[] => {
+    return invites.map((invite, index) => (
       <TouchableOpacity
         key={index}
         activeOpacity={1}

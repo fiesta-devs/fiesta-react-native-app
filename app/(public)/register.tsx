@@ -1,16 +1,15 @@
-import { Button, TextInput, View, StyleSheet } from 'react-native';
-import { useSignUp } from '@clerk/clerk-expo';
-import Spinner from 'react-native-loading-spinner-overlay';
-import { useState } from 'react';
-import { Stack } from 'expo-router';
+import { Button, TextInput, View, StyleSheet } from "react-native";
+import { useSignUp } from "@clerk/clerk-expo";
+import Spinner from "react-native-loading-spinner-overlay";
+import { useState } from "react";
+import { Stack } from "expo-router";
 
 const Register = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
 
-  const [emailAddress, setEmailAddress] = useState('');
-  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [pendingVerification, setPendingVerification] = useState(false);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Create the user and send the verification email
@@ -23,14 +22,13 @@ const Register = () => {
     try {
       // Create the user on Clerk
       await signUp.create({
-        emailAddress,
-        password,
+        phoneNumber,
       });
 
-      // Send verification Email
-      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+      // Send verification code
+      await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
 
-      // change the UI to verify the email address
+      // change the UI to verify the phone number
       setPendingVerification(true);
     } catch (err: any) {
       alert(err.errors[0].message);
@@ -47,7 +45,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const completeSignUp = await signUp.attemptEmailAddressVerification({
+      const completeSignUp = await signUp.attemptPhoneNumberVerification({
         code,
       });
 
@@ -59,6 +57,12 @@ const Register = () => {
     }
   };
 
+  const resetSignUpState = () => {
+    setPendingVerification(false);
+    setPhoneNumber("");
+    setCode("");
+  };
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerBackVisible: !pendingVerification }} />
@@ -66,19 +70,43 @@ const Register = () => {
 
       {!pendingVerification && (
         <>
-          <TextInput autoCapitalize="none" placeholder="simon@galaxies.dev" value={emailAddress} onChangeText={setEmailAddress} style={styles.inputField} />
-          <TextInput placeholder="password" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputField} />
-
-          <Button onPress={onSignUpPress} title="Sign up" color={'#6c47ff'}></Button>
+          <TextInput
+            keyboardType="numeric"
+            placeholder="Enter Phone Number"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            style={styles.inputField}
+            textContentType="telephoneNumber"
+          />
+          <Button
+            onPress={onSignUpPress}
+            title="Register"
+            color={"#6c47ff"}
+          ></Button>
         </>
       )}
 
       {pendingVerification && (
         <>
           <View>
-            <TextInput value={code} placeholder="Code..." style={styles.inputField} onChangeText={setCode} />
+            <TextInput
+              value={code}
+              placeholder="Enter Code"
+              style={styles.inputField}
+              onChangeText={setCode}
+              textContentType="oneTimeCode"
+            />
           </View>
-          <Button onPress={onPressVerify} title="Verify Email" color={'#6c47ff'}></Button>
+          <Button
+            onPress={resetSignUpState}
+            title="Back"
+            color={"#6c0000"}
+          ></Button>
+          <Button
+            onPress={onPressVerify}
+            title="Verify"
+            color={"#6c47ff"}
+          ></Button>
         </>
       )}
     </View>
@@ -88,21 +116,21 @@ const Register = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 20,
   },
   inputField: {
     marginVertical: 4,
     height: 50,
     borderWidth: 1,
-    borderColor: '#6c47ff',
+    borderColor: "#6c47ff",
     borderRadius: 4,
     padding: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   button: {
     margin: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
 });
 

@@ -22,6 +22,7 @@ export const LogoutButton = () => {
 const TabsPage = () => {
   const { isSignedIn } = useAuth();
 
+  //if user info filled out, if not prompt for name, school, pic
   return (
     <TabsProvider>
       <Tabs

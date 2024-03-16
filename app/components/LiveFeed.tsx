@@ -15,6 +15,7 @@ interface User {
 }
 
 interface Scan {
+  id: string;
   accepted: boolean;
   user: User;
   createdAt: string;

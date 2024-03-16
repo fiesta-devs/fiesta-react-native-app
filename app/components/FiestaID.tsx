@@ -4,7 +4,18 @@ import { Box, Text, Image } from "@gluestack-ui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import QRCodeComponent from "./QRCodeComponent";
 
-export default function FiestaID({ user }) {
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
+}
+
+interface FiestaIDProps {
+  user: User;
+}
+
+const FiestaID: React.FC<FiestaIDProps> = ({ user }) => {
   return (
     <Box style={styles.container}>
       <Box style={styles.card}>
@@ -25,7 +36,7 @@ export default function FiestaID({ user }) {
       </Box>
     </Box>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -70,3 +81,5 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
 });
+
+export default FiestaID;
