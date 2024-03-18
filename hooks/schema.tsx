@@ -1,72 +1,102 @@
 export interface User {
-  id: string;
+  id: number;
   clerkId: string;
   admin: boolean;
   firstName: string;
   lastName: string;
   phone: string;
   profilePicture?: string;
-  organizationId?: string;
-  invitesIds: string[];
+  orgId?: number;
+  orgProfileId?: number;
+  schoolId?: number;
   createdAt: Date;
   updatedAt: Date;
+  invites: Invite[];
+  scans: Scan[];
+  org?: Org;
+  orgProfile?: OrgProfile;
+  school?: School;
 }
 
-export interface Organization {
-  id: string;
+export interface School {
+  id: number;
   name: string;
-  ownerIds: string[];
-  liveEventId?: string;
-  membersIds: string[];
-  numMembers: number;
-  eventsIds: string[];
+  city: string;
+  state: string;
   createdAt: Date;
   updatedAt: Date;
+  users: User[];
+  orgs: Org[];
+}
+
+export interface Org {
+  id: number;
+  name: string;
+  liveEventId?: number;
+  schoolId: number;
+  createdAt: Date;
+  updatedAt: Date;
+  members: User[];
+  events: Event[];
+  school: School;
+}
+
+export interface OrgProfile {
+  id: number;
+  owner: boolean;
+  userId: number;
+  createdAt: Date;
+  updatedAt: Date;
+  user: User;
+  scans: Scan[];
 }
 
 export interface Event {
-  id: string;
+  id: number;
   name: string;
   description: string;
   location?: string;
-  date?: string;
-  startTime?: string;
-  endTime?: string;
+  date?: Date;
+  startTime?: Date;
+  endTime?: Date;
   live: boolean;
-  numEntered: number;
-  numDenied: number;
-  invitesIds: string[];
-  numInvites: number;
-  pendingInvitesIds: string[];
-  organizationId: string;
+  orgId: number;
   createdAt: Date;
   updatedAt: Date;
+  invites: Invite[];
+  pendingInvites: PendingInvite[];
+  org: Org;
 }
 
 export interface Invite {
-  id: string;
-  userId: string;
-  eventId: string;
+  id: number;
+  userId: number;
+  eventId: number;
   createdAt: Date;
   updatedAt: Date;
+  user: User;
+  event: Event;
 }
 
 export interface Scan {
-  id: string;
-  inviteId?: string;
-  userId: string;
-  eventId: string;
+  id: number;
   accepted: boolean;
-  scannedBy: string;
+  eventId: number;
+  inviteId?: number;
+  userId: number;
+  createdById: number;
   createdAt: Date;
+  user: User;
+  createdBy: OrgProfile;
 }
 
 export interface PendingInvite {
-  id: string;
+  id: number;
   phoneNumber: string;
-  eventId: string;
+  eventId: number;
   createdAt: Date;
   updatedAt: Date;
+  event: Event;
 }
 
 export enum ScanStatus {
