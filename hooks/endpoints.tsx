@@ -19,10 +19,32 @@ const BASE_URL = "http://localhost:8080"; //TESTING
 //   // }
 // };
 
+export const getMe = async (token: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/me`, {
+      method: "GET", 
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    throw error;
+  }
+};
+
 export const getUserProfile = async (token: string) => {
   try {
     const response = await fetch(`${BASE_URL}/user`, {
-      method: "GET", // GET is the default method, so this is optional
+      method: "GET", 
       headers: {
         Authorization: `Bearer ${token}`,
       },
