@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'scanner-test',
+  name: 'fiesta-react-native-app',
   scheme: "myapp",
   version: '1.0.0',
   extra: {
