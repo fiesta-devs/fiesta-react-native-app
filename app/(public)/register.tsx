@@ -1,15 +1,36 @@
-import { Button, TextInput, View, StyleSheet } from "react-native";
+import { TextInput, View, StyleSheet } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useState } from "react";
 import { Stack } from "expo-router";
 
+import {
+  ArrowLeftIcon,
+  Box,
+  Text,
+  Icon,
+  Input,
+  Button,
+  ButtonText,
+  SafeAreaView,
+  InputField,
+  RepeatIcon,
+} from "@gluestack-ui/themed";
+import {
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+
 const Register = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
 
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [pendingVerification, setPendingVerification] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [verifying, setVerifying] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
   const [code, setCode] = useState("");
+  const [codeError, setCodeError] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Create the user and send the verification email
@@ -22,14 +43,14 @@ const Register = () => {
     try {
       // Create the user on Clerk
       await signUp.create({
-        phoneNumber,
+        phoneNumber: phone,
       });
 
       // Send verification code
       await signUp.preparePhoneNumberVerification({ strategy: "phone_code" });
 
       // change the UI to verify the phone number
-      setPendingVerification(true);
+      setVerifying(true);
     } catch (err: any) {
       alert(err.errors[0].message);
     } finally {
@@ -57,36 +78,58 @@ const Register = () => {
     }
   };
 
+  const handlePhoneChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    const newPhone = e.nativeEvent.text;
+    setPhone(newPhone);
+    setPhoneError("");
+  };
+
+  const [disableSendCode, setDisableSendCode] = useState(false);
+
+  const handleCodeChange = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    const newCode = e.nativeEvent.text;
+    setCode(newCode);
+    setCodeError("");
+  };
+
   const resetSignUpState = () => {
-    setPendingVerification(false);
-    setPhoneNumber("");
+    setVerifying(false);
+    setPhone("");
     setCode("");
   };
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ headerBackVisible: !pendingVerification }} />
+      <Stack.Screen options={{ headerBackVisible: !verifying }} />
       <Spinner visible={loading} />
 
-      {!pendingVerification && (
+      {!verifying && (
         <>
           <TextInput
             keyboardType="numeric"
             placeholder="Enter Phone Number"
-            value={phoneNumber}
-            onChangeText={setPhoneNumber}
+            value={phone}
+            onChangeText={setPhone}
             style={styles.inputField}
             textContentType="telephoneNumber"
           />
           <Button
             onPress={onSignUpPress}
-            title="Register"
-            color={"#6c47ff"}
-          ></Button>
+            bg={"#FF025B"}
+            rounded={"$full"}
+            size="xl"
+            h={"$16"}
+          >
+            <ButtonText>Register</ButtonText>
+          </Button>
         </>
       )}
 
-      {pendingVerification && (
+      {verifying && (
         <>
           <View>
             <TextInput
@@ -99,14 +142,15 @@ const Register = () => {
           </View>
           <Button
             onPress={resetSignUpState}
-            title="Back"
-            color={"#6c0000"}
-          ></Button>
+          >
+            <ButtonText>back</ButtonText>
+          </Button>
           <Button
             onPress={onPressVerify}
-            title="Verify"
-            color={"#6c47ff"}
-          ></Button>
+            bg={"#6c47ff"}
+          >
+            <ButtonText>Verify</ButtonText>
+          </Button>
         </>
       )}
     </View>

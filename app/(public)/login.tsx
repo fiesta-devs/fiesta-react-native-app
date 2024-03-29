@@ -2,9 +2,6 @@ import { useSignIn, isClerkAPIResponseError } from "@clerk/clerk-expo";
 import { Link } from "expo-router";
 import React, { useState, useEffect } from "react";
 import {
-  StyleSheet,
-  TextInput,
-  Pressable,
   NativeSyntheticEvent,
   TextInputChangeEventData,
   TouchableWithoutFeedback,
@@ -240,15 +237,15 @@ const Login = () => {
           w={"$full"}
           h={"$full"}
           px={"$4"}
-          // borderWidth={"$2"}
-          // borderColor="$white"
+        // borderWidth={"$2"}
+        // borderColor="$white"
         >
           <Box
             mt={"$32"}
             mb={"$20"}
             position="relative"
-            // borderWidth={"$2"}
-            // borderColor="$white"
+          // borderWidth={"$2"}
+          // borderColor="$white"
           >
             <Text size="4xl" fontWeight="$semibold" color="$white">
               Welcome to the party.
