@@ -137,8 +137,7 @@ const Login = () => {
         await setActive({ session: completeSignIn.createdSessionId });
       }
     } catch (err: unknown) {
-      // See https://clerk.com/docs/custom-flows/error-handling for more on error handling
-      setLoading(false);
+      // See https://clerk.com/docs/custom-flows/error-handling for more on error handling 
       if (isClerkAPIResponseError(err)) {
         const error = err.errors[0];
         if (error.code === "verification_failed") {
@@ -153,6 +152,8 @@ const Login = () => {
       } else {
         setCodeError("An error occurred");
       }
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-//const BASE_URL = "https://scanner-api.fly.dev"; //LIVE
+//const BASE_URL = "https://fiesta-api.fly.dev"; //LIVE
 const BASE_URL = "http://localhost:8080"; //TESTING
 
 //get user profile
@@ -22,7 +22,7 @@ const BASE_URL = "http://localhost:8080"; //TESTING
 export const getMe = async (token: string) => {
   try {
     const response = await fetch(`${BASE_URL}/me`, {
-      method: "GET", 
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -44,7 +44,7 @@ export const getMe = async (token: string) => {
 export const getUserProfile = async (token: string) => {
   try {
     const response = await fetch(`${BASE_URL}/user`, {
-      method: "GET", 
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },

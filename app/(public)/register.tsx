@@ -1,5 +1,5 @@
-import { TextInput, View, StyleSheet, Alert } from "react-native";
-import { useSignUp } from "@clerk/clerk-expo";
+import { TextInput, View, StyleSheet, Alert, Pressable } from "react-native";
+import { useSignUp, isClerkAPIResponseError } from "@clerk/clerk-expo";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useState } from "react";
 import { Stack } from "expo-router";
@@ -48,6 +48,7 @@ const Register = () => {
   const [codeError, setCodeError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [sessionId, setSessionId] = useState<string>('');
+  const [disableSendCode, setDisableSendCode] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile>({ firstName: '', lastName: '', profilePicture: '' });
 
   // Create the user and send the verification email
@@ -89,8 +90,22 @@ const Register = () => {
       setVerifying(false);
       setSessionId(completeSignUp.createdSessionId);
       setSettingUp(true);
-    } catch (err: any) {
-      alert(err.errors[0].message);
+    } catch (err: unknown) {
+      // See https://clerk.com/docs/custom-flows/error-handling for more on error handling 
+      if (isClerkAPIResponseError(err)) {
+        const error = err.errors[0];
+        if (error.code === "verification_failed") {
+          setCodeError("Verification failed");
+        } else if (error.code === "form_code_incorrect") {
+          setCodeError("Incorrect code");
+        } else if (code === "") {
+          setCodeError("Please enter a valid code");
+        } else {
+          setCodeError("Verification error");
+        }
+      } else {
+        setCodeError("An error occurred");
+      }
     } finally {
       setLoading(false);
     }
@@ -141,8 +156,6 @@ const Register = () => {
     setPhone(newPhone);
     setPhoneError("");
   };
-
-  const [disableSendCode, setDisableSendCode] = useState(false);
 
   const handleCodeChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>
@@ -277,6 +290,20 @@ const Register = () => {
       )}
       {settingUp && (
         <>
+          <View style={styles.imagePicker}>
+            {profile.profilePicture ? (
+              <>
+                <Image alt='current_avatar' source={{ uri: profile.profilePicture }} style={styles.imagePreview} />
+                <Button onPress={pickImage} bg={'#6c47ff'}>
+                  <ButtonText>{profile.profilePicture ? 'Change' : 'Select'} Profile Picture</ButtonText>
+                </Button>
+              </>
+            ) : (
+              <Pressable onPress={pickImage}>
+                <Image source={require('../../assets/default_avatar.png')} style={styles.imagePreview} alt='default profile pic' />
+              </Pressable>
+            )}
+          </View>
           <TextInput
             value={profile.firstName}
             placeholder="First Name"
@@ -289,21 +316,6 @@ const Register = () => {
             style={styles.inputField}
             onChangeText={(text) => setProfile({ ...profile, lastName: text })}
           />
-          <View style={styles.imagePicker}>
-            {profile.profilePicture ? (
-              <>
-                <Image source={{ uri: profile.profilePicture }} style={styles.imagePreview} />
-                <Button onPress={pickImage} bg={'#6c47ff'}>
-                  <ButtonText>Retake</ButtonText>
-                </Button>
-              </>
-            ) : (
-              <Button onPress={pickImage} bg={'#6c47ff'}>
-                <ButtonText>Select a Profile Picture</ButtonText>
-              </Button>
-            )}
-
-          </View>
           <Button onPress={onSettingUp} bg={'#6c47ff'}>
             <ButtonText>Complete Sign Up</ButtonText>
           </Button>
