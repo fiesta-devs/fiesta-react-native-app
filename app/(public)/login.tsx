@@ -290,7 +290,7 @@ const Login = () => {
             >
               <ButtonText>Login</ButtonText>
             </Button>
-            <Text
+            {/* <Text
               size="2xl"
               color="$light300"
               textAlign="center"
@@ -308,7 +308,7 @@ const Login = () => {
               >
                 <ButtonText color="$light300">Create Account</ButtonText>
               </Button>
-            </Link>
+            </Link> */}
           </Box>
           {/* <Spinner visible={loading} /> */}
         </Box>
