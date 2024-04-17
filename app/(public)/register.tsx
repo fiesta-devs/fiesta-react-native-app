@@ -1,9 +1,10 @@
 import { TextInput, View, StyleSheet, Alert, Pressable } from "react-native";
-import { useSignUp, isClerkAPIResponseError } from "@clerk/clerk-expo";
+import { useSignUp, isClerkAPIResponseError, useSession } from "@clerk/clerk-expo";
 import Spinner from "react-native-loading-spinner-overlay";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Stack } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
+import { createUser, uploadProfilePic } from '../../hooks/endpoints';
 
 import {
   ArrowLeftIcon,
@@ -40,6 +41,7 @@ interface ImageResult {
 
 const Register = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const { session } = useSession();
   const [settingUp, setSettingUp] = useState<boolean>(false);
   const [phone, setPhone] = useState<string>("");
   const [verifying, setVerifying] = useState<boolean>(false);
@@ -47,7 +49,6 @@ const Register = () => {
   const [code, setCode] = useState<string>("");
   const [codeError, setCodeError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [sessionId, setSessionId] = useState<string>('');
   const [disableSendCode, setDisableSendCode] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile>({ firstName: '', lastName: '', profilePicture: '' });
 
@@ -88,10 +89,14 @@ const Register = () => {
         code,
       });
       setVerifying(false);
-      setSessionId(completeSignUp.createdSessionId);
-      setSettingUp(true);
+      if (completeSignUp.status !== "complete") {
+        throw new Error("internal server error");
+      }
+      if (completeSignUp.status === "complete") {
+        await setActive({ session: completeSignUp.createdSessionId });
+        setSettingUp(true);
+      }
     } catch (err: unknown) {
-      // See https://clerk.com/docs/custom-flows/error-handling for more on error handling 
       if (isClerkAPIResponseError(err)) {
         const error = err.errors[0];
         if (error.code === "verification_failed") {
@@ -111,29 +116,37 @@ const Register = () => {
     }
   };
 
-  const onSettingUp = async () => {
-    // Confirmation before completing sign-up
-    Alert.alert('Confirm', 'Are you sure you want to complete sign-up?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Yes',
-        onPress: async () => {
-          if (!isLoaded) {
-            return;
-          }
-          setLoading(true);
+  //called when click complete sign up
+  const completeSignUp = async () => {
+    try {
+      // Get the token from the active session
+      const token = await session.getToken();
+      console.log("token: ", token)
 
-          try {
-            await setActive({ session: sessionId });
-            // Add code to update the user's profile with the entered information
-          } catch (err: any) {
-            alert(err.errors[0].message);
-          } finally {
-            setLoading(false);
-          }
-        },
-      },
-    ]);
+      // Create user in your backend
+      const userData = {
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        // Add other necessary fields
+      };
+      await createUser(userData, token);
+
+      // Upload profile picture if it exists
+      if (profile.profilePicture) {
+        const fileUri = profile.profilePicture;
+        const response = await fetch(fileUri);
+        const blob = await response.blob();
+        const formData = new FormData();
+        formData.append('profilePicture', blob);
+
+        await uploadProfilePic(profile.profilePicture, token);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred during sign-up.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const pickImage = async () => {
@@ -290,6 +303,7 @@ const Register = () => {
       )}
       {settingUp && (
         <>
+          <Spinner visible={loading} />
           <View style={styles.imagePicker}>
             {profile.profilePicture ? (
               <>
@@ -316,7 +330,7 @@ const Register = () => {
             style={styles.inputField}
             onChangeText={(text) => setProfile({ ...profile, lastName: text })}
           />
-          <Button onPress={onSettingUp} bg={'#6c47ff'}>
+          <Button onPress={completeSignUp} bg={'#6c47ff'}>
             <ButtonText>Complete Sign Up</ButtonText>
           </Button>
         </>

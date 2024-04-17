@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import FiestaID from "../../components/FiestaID";
 import { useTabsContext } from "../../context/TabsContext";
 import { SafeAreaView, Box, Text, Spinner } from "@gluestack-ui/themed";
+
 interface UserProfile {
   id: string;
   firstName: string;

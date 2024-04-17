@@ -6,7 +6,7 @@ import QRCode from 'react-native-qrcode-svg';
 export default function QRCodeComponent({ value, size }) {
   return (
     <Box style={styles.container}>
-      <QRCode value={value} size={size} />
+      <QRCode value={String(value)} size={size} />
     </Box>
   );
 }

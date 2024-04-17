@@ -8,7 +8,7 @@ import { StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const Profile = () => {
-  const { userProfile, setUserProfile, invites } = useTabsContext();
+  const { userProfile, setUserProfile } = useTabsContext();
   console.log("Profile: " + userProfile);
   const fullName = `${userProfile?.firstName} ${userProfile?.lastName}`;
   const [joined, setJoined] = useState(null);
@@ -42,13 +42,13 @@ const Profile = () => {
   return (
     <SafeAreaView h={"$full"} backgroundColor="white">
       <Box style={styles.pageTitleBox}>
-          <Box style={styles.pageTitleTextBox}>
-            <Text style={styles.pageTitleText}>
-              <Ionicons color="white" name="pin" size={20} /> Johns Hopkins
-              University
-            </Text>
-          </Box>
+        <Box style={styles.pageTitleTextBox}>
+          <Text style={styles.pageTitleText}>
+            <Ionicons color="white" name="pin" size={20} /> Johns Hopkins
+            University
+          </Text>
         </Box>
+      </Box>
       <Box flex={1} gap={"$1"} px={"$5"} pt={"$10"}>
         <Avatar
           bgColor=/*{`${user.color}`}*/ "$amber800"
@@ -67,13 +67,13 @@ const Profile = () => {
         <Text size="2xl" fontWeight="$semibold" color="$black">
           {userProfile?.firstName} {userProfile?.lastName}
         </Text>
-          <Text size="md" fontWeight="$semibold" color="#999999">
-            {`Member since ${joined}`}
-          </Text>
+        <Text size="md" fontWeight="$semibold" color="#999999">
+          {`Member since ${joined}`}
+        </Text>
         <Box style={styles.container}>
           <Box style={styles.box}>
             <Text style={styles.text}>Invited</Text>
-            <Text style={styles.subtext}>{invites?.length}</Text>
+            <Text style={styles.subtext}>{userProfile.invites?.length}</Text>
           </Box>
           <Box style={[styles.box, styles.border]}>
             <Text style={styles.text}>Attended</Text>

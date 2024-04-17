@@ -10,7 +10,7 @@ const ScanPage = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
   const [scanValue, setScanValue] = useState<string | null>(null);
-  const { liveEvents, userProfile } = useTabsContext(); // Destructure userProfile from useTabsContext
+  const { userProfile } = useTabsContext(); // Destructure userProfile from useTabsContext
 
   const resetState = () => {
     setScanned(false);
@@ -38,13 +38,13 @@ const ScanPage = () => {
   // };
 
   return (
-    <SafeAreaView bg="$white" sx={{ marginVertical: 20 }}>
-      {/* {liveEvents.length === 0 ? (
-        <Box flex={1} alignItems="center" justifyContent="center">
-          <Text size="3xl" paddingBottom={20} fontWeight="$semibold">
-            Ready to party?
+    <SafeAreaView>
+      {!userProfile.org.liveEventId ? (
+        <Box alignItems="center" justifyContent="center">
+          <Text size="3xl" fontWeight="$semibold">
+            No live events :(
           </Text>
-          <Button
+          {/* <Button
             onPress={openOrgDashboardInSafari}
             bg="#FF025B"
             // size="lg"
@@ -52,39 +52,39 @@ const ScanPage = () => {
             rounded={"$full"}
           >
             <ButtonText>View events</ButtonText>
-          </Button>
+          </Button> */}
         </Box>
-      ) : ( */}
-      <Box>
-        {hasPermission === null && (
-          <Text fontSize="$md">Requesting for camera permission</Text>
-        )}
-        {hasPermission === false && (
-          <Box p={4}>
-            <Text fontSize="$md" my={2}>
-              No access to camera
-            </Text>
-            <Button onPress={askForCamPermission}>Allow Camera</Button>
-          </Box>
-        )}
-        {hasPermission && (
-          <Box>
-            {!scanned && (
-              <Scanner
-                hasPermission={hasPermission}
-                scanned={scanned}
-                onScan={handleScan}
-              />
-            )}
-          </Box>
-        )}
-      </Box>
-      {/* )} */}
+      ) : (
+        <Box>
+          {hasPermission === null && (
+            <Text fontSize="$md">Requesting for camera permission</Text>
+          )}
+          {hasPermission === false && (
+            <Box p={4}>
+              <Text fontSize="$md" my={2}>
+                No access to camera
+              </Text>
+              <Button onPress={askForCamPermission}>Allow Camera</Button>
+            </Box>
+          )}
+          {hasPermission && (
+            <Box>
+              {!scanned && (
+                <Scanner
+                  hasPermission={hasPermission}
+                  scanned={scanned}
+                  onScan={handleScan}
+                />
+              )}
+            </Box>
+          )}
+        </Box>
+      )}
       <ScanDrawer
         scanned={scanned}
         resetState={resetState}
         scanValue={scanValue}
-        eventId={liveEvents[0]?.id}
+        eventId={userProfile.liveEventId}
       />
     </SafeAreaView>
   );

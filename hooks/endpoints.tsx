@@ -2,6 +2,12 @@ import axios from "axios";
 
 //const BASE_URL = "https://fiesta-api.fly.dev"; //LIVE
 const BASE_URL = "http://localhost:8080"; //TESTING
+//const BASE_URL = "fiesta-api-preview.fly.dev" //PREVIEW
+
+interface User {
+  firstName: string;
+  lastName: string;
+}
 
 //get user profile
 // export const getUserProfile = async (token: string) => {
@@ -19,6 +25,40 @@ const BASE_URL = "http://localhost:8080"; //TESTING
 //   // }
 // };
 
+// Function to post user data
+export const createUser = async (userData: User, token: string) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/user`, userData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error creating user:', error);
+    throw error;
+  }
+};
+
+// Function to post user profile picture
+export const uploadProfilePic = async (file: string, token: string) => {
+  try {
+    const formData = new FormData();
+    formData.append('profilePicture', file);
+
+    const response = await axios.post(`${BASE_URL}/user/profile-pic`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading profile picture:', error);
+    throw error;
+  }
+};
+
 export const getMe = async (token: string) => {
   try {
     const response = await fetch(`${BASE_URL}/me`, {
@@ -33,7 +73,6 @@ export const getMe = async (token: string) => {
     }
 
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Error fetching user profile:", error);

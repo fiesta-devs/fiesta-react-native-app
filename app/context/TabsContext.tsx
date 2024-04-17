@@ -6,19 +6,14 @@ import React, {
   useEffect,
 } from "react";
 import {
-  getUserProfile,
-  getLiveEvents,
-  getInvites,
+  getMe,
 } from "../../hooks/endpoints";
 import { useAuth } from "@clerk/clerk-expo";
 import { View, ActivityIndicator } from "react-native";
 
 interface TabsContextType {
-  liveEvents: any[]; // Replace 'any' with the appropriate type for your events
-  setLiveEvents: (events: any[]) => void;
   userProfile: any | null; // Replace 'any' with the appropriate type for your user profile
   setUserProfile: (userProfile: any | null) => void;
-  invites: any[] | null;
 }
 
 const TabsContext = createContext<TabsContextType | undefined>(undefined);
@@ -51,13 +46,9 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
     const fetchData = async () => {
       try {
         const token = await getToken();
-        const userProfileData = await getUserProfile(token);
+        const userProfileData = await getMe(token);
         console.log("user: ", userProfileData);
         setUserProfile(userProfileData);
-        const liveEventsData = await getLiveEvents(token);
-        setLiveEvents(liveEventsData);
-        const invitesData = await getInvites(token);
-        setInvites(invitesData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -81,11 +72,8 @@ export const TabsProvider: React.FC<TabsProviderProps> = ({ children }) => {
   return (
     <TabsContext.Provider
       value={{
-        liveEvents,
-        setLiveEvents,
         userProfile,
         setUserProfile,
-        invites,
       }}
     >
       {children}
