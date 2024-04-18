@@ -15,65 +15,54 @@ import {
 } from "@gluestack-ui/themed";
 import ScannedProfile from "./ScannedProfile";
 import ErrorProfile from "./ErrorProfile";
-import { postScan } from "../../hooks/endpoints";
-import { useAuth } from "@clerk/clerk-expo";
+
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
+  scans: Scan[];
+}
+
+interface Scan {
+  id: number;
+  accepted: boolean;
+  eventId: number;
+  inviteId: number;
+  userId: number;
+  createdById: number;
+  createdAt: string;
+  user: User;
+}
 
 export default function ScanDrawer({
   scanned,
-  scanValue,
-  eventId,
+  scan,
   resetState,
+  error
 }: {
   scanned: boolean;
-  scanValue: string;
-  eventId: string;
+  scan: Scan;
   resetState: any;
+  error: boolean;
 }) {
-  const { getToken } = useAuth();
-  const [scannedUser, setScannedUser] = React.useState<{
-    firstName: string;
-    lastName: string;
-    profilePicture: string;
-  }>(null);
-  const [scan, setScan] = React.useState<{
-    accepted: boolean;
-    createdAt: Date;
-    eventId: string;
-    id: string;
-    inviteId: string;
-    scannedBy: string;
-    userId: string;
-  }>(null);
-  const [error, setError] = React.useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await getToken();
-        const scanData = await postScan(token, scanValue, eventId);
-        setScannedUser(scanData.user);
-        setScan(scanData.scan);
-        console.log(scanData);
-      } catch (error) {
-        setError(true);
-      }
-    };
-
-    if (scanValue !== null) {
-      fetchData();
-    }
-  }, [scanValue]);
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   function handleClose() {
     resetState();
-    setError(false);
+    setLoading(false);
   }
 
   function getScanColor() {
     return scan?.accepted ? "#E6FFE0" : "#FFE0E0";
   }
 
-  if (scannedUser?.profilePicture || error) {
+  if (loading) {
+    return <Spinner />;
+  }
+  else if (error || scan) {
+    console.log("error: " + error);
+    console.log("scan: " + scan);
     return (
       <Center>
         <Actionsheet isOpen={scanned} onClose={handleClose}>
@@ -96,9 +85,9 @@ export default function ScanDrawer({
               >
                 <Box w="75%" px={4} justifyContent="center" bg={getScanColor()}>
                   {error ? (
-                    <ErrorProfile user={scannedUser} scan={scan} />
+                    <ErrorProfile user={scan?.user} />
                   ) : (
-                    <ScannedProfile user={scannedUser} scan={scan} />
+                    <ScannedProfile scan={scan} />
                   )}
                 </Box>
               </Box>
@@ -123,8 +112,6 @@ export default function ScanDrawer({
         </Actionsheet>
       </Center>
     );
-  } else if (scanned) {
-    return <Spinner />;
   } else {
     return null
   }

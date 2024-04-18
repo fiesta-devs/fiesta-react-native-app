@@ -1,25 +1,33 @@
 import React from "react";
 import { Avatar, AvatarImage, Box, Text } from "@gluestack-ui/themed";
 
+interface Scan {
+  id: number;
+  accepted: boolean;
+  eventId: number;
+  inviteId: number;
+  userId: number;
+  createdById: number;
+  createdAt: string;
+  user: User;
+}
+
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
+  scans: Scan[];
+}
+
 export default function ScannedProfile({
-  user,
-  scan,
+  scan
 }: {
-  user: {
-    firstName: string;
-    lastName: string;
-    profilePicture: string;
-  };
-  scan: {
-    accepted: boolean;
-    createdAt: Date;
-    eventId: string;
-    id: string;
-    inviteId: string;
-    scannedBy: string;
-    userId: string;
-  };
+  scan: Scan
 }) {
+  console.log("scanned profile")
+  console.log("scan: ", scan);
+  console.log("user: ", scan?.user);
   return (
     <Box justifyContent="center" alignItems="center" w={"$full"}>
       <Avatar
@@ -31,12 +39,12 @@ export default function ScannedProfile({
         <AvatarImage
           alt="profile picture"
           source={{
-            uri: `${user?.profilePicture}`,
+            uri: `${scan?.user?.profilePicture}`,
           }}
         />
       </Avatar>
       <Text size={"4xl"} fontWeight={"$semibold"} color="black">
-        {user?.firstName + " " + user?.lastName}
+        {scan?.user?.firstName + " " + scan?.user?.lastName}
       </Text>
       {scan?.accepted ? <Box
         bgColor={"#AFFF9C"}

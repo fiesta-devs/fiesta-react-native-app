@@ -4,17 +4,52 @@ import { BarCodeScanner, BarCodeScannedCallback } from "expo-barcode-scanner";
 import Scanner from "./Scanner";
 import ScanDrawer from "./ScanDrawer";
 import { useTabsContext } from "../context/TabsContext";
-//import { Linking } from "react-native";
+import { useAuth } from "@clerk/clerk-expo";
+import { postScan } from "../../hooks/endpoints";
+
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
+  scans: Scan[];
+}
+
+interface Scan {
+  id: number;
+  accepted: boolean;
+  eventId: number;
+  inviteId: number;
+  userId: number;
+  createdById: number;
+  createdAt: string;
+  user: User;
+}
 
 const ScanPage = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState<boolean>(false);
-  const [scanValue, setScanValue] = useState<string | null>(null);
+  const [scan, setScan] = useState<Scan>(null);
+  const [error, setError] = useState<boolean>(false);
+  const { getToken } = useAuth();
   const { userProfile } = useTabsContext(); // Destructure userProfile from useTabsContext
+
+  const fetchData = async (userId: string) => {
+    try {
+      const token = await getToken();
+      const scanData = await postScan(token, userId, userProfile?.org.liveEventId);
+      console.log("fetchData: ", scanData);
+      return scanData;
+    } catch (error) {
+      setError(true);
+      return null;
+    }
+  };
 
   const resetState = () => {
     setScanned(false);
-    setScanValue(null);
+    setScan(null);
+    setError(false);
   };
 
   const askForCamPermission = () => {
@@ -28,9 +63,10 @@ const ScanPage = () => {
     askForCamPermission();
   }, []);
 
-  const handleScan: BarCodeScannedCallback = (scanningResult) => {
+  const handleScan: BarCodeScannedCallback = async (scanningResult) => {
+    const data = await fetchData(scanningResult.data);
     setScanned(true);
-    setScanValue(scanningResult.data);
+    setScan(data);
   };
 
   // const openOrgDashboardInSafari = async () => {
@@ -82,9 +118,9 @@ const ScanPage = () => {
       )}
       <ScanDrawer
         scanned={scanned}
+        scan={scan}
         resetState={resetState}
-        scanValue={scanValue}
-        eventId={userProfile?.org.liveEventId}
+        error={error}
       />
     </SafeAreaView>
   );

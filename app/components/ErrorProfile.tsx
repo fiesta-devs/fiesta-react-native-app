@@ -10,25 +10,30 @@ import {
 } from "@gluestack-ui/themed";
 import { Path } from "react-native-svg";
 
+interface Scan {
+  id: number;
+  accepted: boolean;
+  eventId: number;
+  inviteId: number;
+  userId: number;
+  createdById: number;
+  createdAt: string;
+  user: User;
+}
+
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
+  scans: Scan[];
+}
 export default function ScannedProfile({
   user,
-  scan,
 }: {
-  user?: {
-    firstName: string;
-    lastName: string;
-    profilePicture?: string;
-  };
-  scan: {
-    accepted: boolean;
-    createdAt: Date;
-    eventId: string;
-    id: string;
-    inviteId: string;
-    scannedBy: string;
-    userId: string;
-  };
+  user?: User;
 }) {
+  console.log("error profile")
 
   return (
     <Box justifyContent="center" alignItems="center" w={"$full"}>
@@ -84,8 +89,8 @@ function AvatarImageSource({
   user,
 }: {
   user?: {
-    firstName: string;
-    lastName: string;
+    firstName?: string;
+    lastName?: string;
     profilePicture?: string;
   };
 }): JSX.Element {
@@ -95,7 +100,7 @@ function AvatarImageSource({
         <AvatarImage
           alt="profile picture"
           source={{
-            uri: user.profilePicture,
+            uri: user?.profilePicture,
           }}
         />
       ) : (
