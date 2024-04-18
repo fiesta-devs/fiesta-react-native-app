@@ -1,8 +1,8 @@
 import axios from "axios";
 
 //const BASE_URL = "https://fiesta-api.fly.dev"; //LIVE
-const BASE_URL = "http://localhost:8080"; //TESTING
-//const BASE_URL = "fiesta-api-preview.fly.dev" //PREVIEW
+//const BASE_URL = "http://localhost:8080"; //TESTING
+const BASE_URL = "https://fiesta-api-preview.fly.dev" //PREVIEW
 
 interface User {
   firstName: string;
@@ -67,12 +67,12 @@ export const getMe = async (token: string) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
+
     return data;
   } catch (error) {
     console.error("Error fetching user profile:", error);
@@ -180,6 +180,7 @@ export const getLiveEvents = async (token: string) => {
 };
 
 //create a scan object
+
 export const postScan = async (
   token: string,
   userId: string,
@@ -187,8 +188,8 @@ export const postScan = async (
 ) => {
   try {
     const response = await axios.post(
-      `${BASE_URL}/scan`,
-      { userId: userId, eventId: eventId },
+      `${BASE_URL}/org/events/${eventId}/scans`,
+      { userId: userId },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -201,6 +202,7 @@ export const postScan = async (
     throw error;
   }
 };
+
 
 //example number of accepted users at a live event
 export const getAcceptedUsersCount = async (token: string, eventId: string) => {

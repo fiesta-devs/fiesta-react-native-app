@@ -38,17 +38,27 @@ export default function ScannedProfile({
       <Text size={"4xl"} fontWeight={"$semibold"} color="black">
         {user?.firstName + " " + user?.lastName}
       </Text>
-      <Box
+      {scan?.accepted ? <Box
         bgColor={"#AFFF9C"}
         borderRadius={"$full"}
         w={"100%"}
         h={"20%"}
-        justifyContent="center" 
+        justifyContent="center"
         alignItems="center"
         mt={30}
       >
         <Text bold color="black">Get 'EM IN</Text>
-      </Box>
+      </Box> : <Box
+        bgColor={"#FD9C9C"}
+        borderRadius={"$full"}
+        w={"100%"}
+        h={"20%"}
+        justifyContent="center"
+        alignItems="center"
+        mt={30}
+      >
+        <Text bold color="black">GTFO</Text>
+      </Box>}
 
       {/*<Text>
         {String(scan?.createdAt)}

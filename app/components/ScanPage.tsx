@@ -84,7 +84,7 @@ const ScanPage = () => {
         scanned={scanned}
         resetState={resetState}
         scanValue={scanValue}
-        eventId={userProfile.liveEventId}
+        eventId={userProfile?.org.liveEventId}
       />
     </SafeAreaView>
   );

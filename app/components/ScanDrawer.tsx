@@ -96,7 +96,7 @@ export default function ScanDrawer({
               >
                 <Box w="75%" px={4} justifyContent="center" bg={getScanColor()}>
                   {error ? (
-                    <ErrorProfile user={scannedUser} scan={scan}/>
+                    <ErrorProfile user={scannedUser} scan={scan} />
                   ) : (
                     <ScannedProfile user={scannedUser} scan={scan} />
                   )}
@@ -123,7 +123,7 @@ export default function ScanDrawer({
         </Actionsheet>
       </Center>
     );
-  } else if (scanned){
+  } else if (scanned) {
     return <Spinner />;
   } else {
     return null
